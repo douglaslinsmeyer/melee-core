@@ -1,6 +1,5 @@
 import { IORequest, IOResponse } from "../io";
 import { logger } from "../logger";
-import { Match } from "../match";
 
 export class AlphaBot {
     name: string;
@@ -14,6 +13,10 @@ export class AlphaBot {
     respond(input: IORequest): IOResponse {
 
         logger.info(`AlphaBot received request: ${JSON.stringify(input)}`);
+
+        const match = input.match;
+
+        
 
         return {
             id: this.name, 

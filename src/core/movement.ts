@@ -24,6 +24,9 @@ export interface LocationInterface {
     x: number;
     y: number;
     z: number;
+
+    distanceTo(other: LocationInterface): number;
+    moveToward(target: LocationInterface, distance: number, stopAtArrival?: boolean): LocationInterface;
 }
 
 /**

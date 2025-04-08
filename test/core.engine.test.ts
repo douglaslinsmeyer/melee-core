@@ -15,13 +15,13 @@ describe('Game engine tests:', () => {
     test('Test game engine start', () => {
         const combatantAlpha = combatantBuilder
             .setName('Alpha-1')
-            .setBot(new Bot('Alpha-1', 'A test bot', 'internal://alpha/alpha-1'))
+            .setBot(new Bot('Alpha-1', 'A test bot', 'internal://alpha'))
             .setLocation(new Location(0, 0, 0))
             .build();
 
         const combatantBravo = combatantBuilder
             .setName('Alpha-2')
-            .setBot(new Bot('Alpha-2', 'A test bot', 'internal://alpha/apha-2'))
+            .setBot(new Bot('Alpha-2', 'A test bot', 'internal://alpha'))
             .setLocation(new Location(1, 0, 0))
             .build();
 

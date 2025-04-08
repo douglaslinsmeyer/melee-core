@@ -18,7 +18,7 @@ standardRules.addRule({
         const maxHealth = Math.max(...match.combatants.map(c => c.health));
         match.winners = match.combatants.filter(c => c.health === maxHealth);
         match.state = MATCH_STATE.COMPLETE;
-        logger.info(`Match ended. Winners: ${match.winners.map(c => c.name).join(', ')}`);
+        logger.info(`Match ended due to reaching round limit. Winner(s): ${match.winners.map(c => c.name).join(', ')}`);
         return match;
     }
 });

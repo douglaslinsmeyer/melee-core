@@ -1,6 +1,7 @@
 import { Locatable, Location, LocationInterface, Moveable } from "./movement";
 import { StatusEffect, Affectable, StatusEffectCritera, applyEffects } from "./effects";
 import { Bot, BotInterface } from "./bot";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Combatant class
@@ -10,8 +11,9 @@ import { Bot, BotInterface } from "./bot";
  */
 export class Combatant implements Locatable, Moveable, Affectable {
     
-    bot: Bot;
+    bot: BotInterface;
     
+    id: string;
     name: string;
     className: string;
 
@@ -33,11 +35,12 @@ export class Combatant implements Locatable, Moveable, Affectable {
     movementSpeed: number = 0;
     movementSpeedModifier: number = 0;
     
-    location: Location;
+    location: LocationInterface;
     statusEffects: StatusEffect[] = [];
 
-    constructor(bot: Bot, location: Location, name: string, className: string) {
+    constructor(bot: BotInterface, location: LocationInterface, name: string, className: string) {
         this.bot = bot;
+        this.id = uuidv4();
         this.name = name;
         this.className = className;
         this.location = location;
@@ -92,12 +95,12 @@ export class CombatantBuilder {
         return this;
     }
 
-    setBot(bot: Bot): CombatantBuilder {
+    setBot(bot: BotInterface): CombatantBuilder {
         this.combatant.bot = bot;
         return this;
     }
 
-    setLocation(location: Location): CombatantBuilder {
+    setLocation(location: LocationInterface): CombatantBuilder {
         this.combatant.location = location;
         return this;
     }
