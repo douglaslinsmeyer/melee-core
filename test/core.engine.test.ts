@@ -9,7 +9,8 @@ import { standardRules } from '../src/core/rules/standard';
 const combatantBuilder = new CombatantBuilder();
 const ioDriver = new IODriverInternal();
 const ioHandler = new IOHandler(ioDriver);
-const engine = new Engine(ioHandler, standardRules);
+const engine = new Engine(ioHandler);
+engine.ruleBook.merge(standardRules);
 
 describe('Game engine tests:', () => {
     test('Test game engine start', () => {

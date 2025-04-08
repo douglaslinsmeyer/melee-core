@@ -15,6 +15,7 @@ export class Combatant implements Locatable, Moveable, Affectable {
     
     id: string;
     name: string;
+    faction: string | null = null; 
     className: string;
 
     currentAction: string = "none";

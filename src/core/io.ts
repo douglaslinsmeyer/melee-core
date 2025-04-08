@@ -1,5 +1,6 @@
 import { Combatant } from "./combatant";
 import { Match } from "./match";
+import { RuleBook } from "./rules";
 
 export interface IODriverInterface {
     name: string;
@@ -16,6 +17,7 @@ export interface IOResponse {
 export interface IORequest {
     combatant: Combatant;
     match: Match;
+    rules: any;
 }
 
 export class IOHandler {
@@ -26,10 +28,11 @@ export class IOHandler {
         this.driver = driver;
     }
 
-    call(uri: string,combatant: Combatant, match: Match): IOResponse {
+    call(uri: string,combatant: Combatant, match: Match, ruleBook: RuleBook): IOResponse {
         return this.driver.call(uri, {
             combatant: combatant,
-            match: match
+            match: match,
+            rules: ruleBook.toSanitizedJSON()
         });
     }
 }

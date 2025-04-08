@@ -5,13 +5,20 @@ import { RuleBook } from '../rules';
 import { logger } from '../logger';
 
 const dice = new Dice();
-export const standardRules = new RuleBook('Standard Rules', 'Standard rules for the game.');
+
+export const standardRules = new RuleBook('core');
+
+enum RULE_CATEGORY {
+    VICTORY_CONDITIONS = 'Victory Conditions',
+}
 
 // A rule that sets the match state to complete when the max rounds are reached
 standardRules.addRule({
-    name: 'core.win-condition.max-rounds',
-    description: 'The match has ended when max rounds are reached, the winner is whichever combatant has the most health.',
+    name: 'win-condition.max-rounds',
+    description: 'The match will end if the round limit is reached; the winner will be whichever combatant has the most health.',
+    category: RULE_CATEGORY.VICTORY_CONDITIONS,
     trigger: EVENT.ROUND_ENDED,
+    visible: true,
     priority: 1,
     apply: (match: Match) => {
         if (match.currentRound < match.rounds) return match;
@@ -25,9 +32,10 @@ standardRules.addRule({
 
 // A rule that sets the match status to "in progress" when the match starts
 standardRules.addRule({
-    name: 'core.match-status.started',
+    name: 'match-status.started',
     description: 'The match status is set to "in progress" when the match starts.',
     trigger: EVENT.MATCH_STARTED,
+    visible: false,
     priority: 1,
     apply: (match: Match) => {
         match.state = MATCH_STATE.IN_PROGRESS;
@@ -38,9 +46,10 @@ standardRules.addRule({
 
 // A rule for determining starting stats for a default combatant class
 standardRules.addRule({
-    name: 'core.starting-stats',
+    name: 'starting-stats',
     description: 'Each combatant starts with default stats.',
     trigger: EVENT.COMBATANTS_ADDED,
+    visible: false,
     priority: 1,
     apply: (match: Match) => {
         match.combatants.forEach(combatant => {
@@ -60,9 +69,10 @@ standardRules.addRule({
 
 // A rule for rolling for initiative at the start of each round
 standardRules.addRule({
-    name: 'core.roll-for-initiative',
+    name: 'roll-for-initiative',
     description: 'At the start of each round, each combatant rolls for initiative.',
     trigger: EVENT.ROUND_STARTED,
+    visible: false,
     priority: 1,
     apply: (match: Match) => {
         match.combatants.forEach(combatant => {

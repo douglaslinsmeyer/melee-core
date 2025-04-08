@@ -1,15 +1,15 @@
 import { Match } from './match';
 
-export interface Actor {
-    name: string;
-    health: number;
-    maxHealth: number;
+export interface ActionInputInterface {
+    combatantId: string;
+    targetId: string;
+    action: string;
+    params?: any;
 }
 
-export interface Action {
+export interface ActionInterface {
     name: string;
     description: string;
-    actor: Actor;
-    target: Actor;
-    apply: (state: Match) => Match;
+    category: string;
+    apply: (input: ActionInputInterface, state: Match) => Match;
 }
