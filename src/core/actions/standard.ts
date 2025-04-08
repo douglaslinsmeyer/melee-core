@@ -13,6 +13,9 @@ standardActions.addAction({
     name: 'core.move-toward',
     description: 'Move your combatant to a new position.',
     category: CATEGORY.MOVEMENT,
+    params: {
+        exampleProperty: "string, some example property.",
+    },
     apply: (input: ActionInputInterface, match: Match): Match => {
         const self = match.combatants.find(c => c.id === input.combatantId);
         const target = match.combatants.find(c => c.id === input.targetId);
@@ -22,7 +25,7 @@ standardActions.addAction({
         }
         
         self.location.moveToward(target.location, self.movementSpeed);
-        logger.info(`Combatant ${self.name} moved toward ${target.name}.`);
+        logger.combat(`[ACTION] Combatant: [${self.id}] moved toward target: [${target.id}].`);
         logger.info(`Combatant ${self.name} is now ${self.location.distanceTo(target.location)} units away from ${target.name}.`);
 
         return match;

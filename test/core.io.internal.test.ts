@@ -14,8 +14,9 @@ describe('Internal driver tests:', () => {
         const response = driver.call('internal://alpha', {
             combatant: new Combatant(new Bot('', '', ''), new Location(0,0,0), '', ''),
             match: new Match(),
-            rules: new RuleBook(),
-            actions: new ActionSet()
+            rules: new RuleBook().toSanitizedJSON(),
+            log: [],
+            actions: new ActionSet().toSanitizedJSON()
         });
         expect(response.id).toBe(alpha.name);
         expect(response.secret).toBe(alpha.key);

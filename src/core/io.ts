@@ -1,5 +1,6 @@
-import { ActionInterface, ActionSet } from "./actions";
+import { ActionSet } from "./actions";
 import { Combatant } from "./combatant";
+import { combatLoggerArray } from "./logger";
 import { Match } from "./match";
 import { RuleBook } from "./rules";
 
@@ -13,13 +14,15 @@ export interface IOResponse {
     secret: string;
     action: string;
     target: string;
+    params?: Record<string, any>;
 }
 
 export interface IORequest {
     combatant: Combatant;
     match: Match;
-    rules: any;
-    actions: any;
+    log: any[];
+    rules: { [key: string]: string[] };
+    actions: Record<string, any>;
 }
 
 export class IOHandler {
@@ -34,6 +37,9 @@ export class IOHandler {
         return this.driver.call(uri, {
             combatant: combatant,
             match: match,
+            log: combatLoggerArray.map(log => {
+                return log[0];
+            }),
             rules: ruleBook.toSanitizedJSON(),
             actions: actions.toSanitizedJSON()
         });

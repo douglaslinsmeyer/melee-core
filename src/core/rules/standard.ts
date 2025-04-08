@@ -24,7 +24,8 @@ standardRules.addRule({
         const maxHealth = Math.max(...match.combatants.map(c => c.health));
         match.winners = match.combatants.filter(c => c.health === maxHealth);
         match.state = MATCH_STATE.COMPLETE;
-        logger.info(`Match ended due to reaching round limit. Winner(s): ${match.winners.map(c => c.name).join(', ')}`);
+        logger.combat(`[MATCH:COMPLETE] The match has ended due to reaching round limit. Winner(s):[${match.winners.map(c => c.name).join(', ')}]`);
+        logger.info(`Match ended due to reaching round limit. Winner(s): ${match.winners.map(c => c.id).join(', ')}.`);
         return match;
     }
 });
@@ -70,7 +71,8 @@ standardRules.addRule({
     apply: (match: Match) => {
         match.combatants.forEach(combatant => {
             combatant.initiative = dice.roll('1d20').total + combatant.initiativeModifier;
-            logger.info(`Combatant ${combatant.bot.name} rolled for initiative: ${combatant.initiative}`);
+            logger.combat(`[INITIATIVE]: The combatant:[${combatant.id}] rolled for initiative:[${combatant.initiative}]`);
+            logger.info(`Combatant ${combatant.id} rolled for initiative: ${combatant.initiative}.`);
         });
         logger.info('All combatants have rolled for initiative.');
         return match;

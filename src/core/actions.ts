@@ -11,6 +11,7 @@ export interface ActionInterface {
     name: string;
     description: string;
     category: string;
+    params?: Record<string, string>;
     apply: (input: ActionInputInterface, state: Match) => Match;
 }
 
@@ -26,19 +27,25 @@ export class ActionSet {
         this.actions.push(action);
     }
 
-    toSanitizedJSON(): any {
-        const actionsDescriptions: { [key: string]: string[] } = {};
+    toSanitizedJSON(): Record<string, any> {
+        const actionsDescriptions: { [key: string]: object[] } = {};
         this.actions.forEach(action => {
-            const category = action.category || "default";
-            if (!actionsDescriptions[category]) {
-                actionsDescriptions[category] = [];
+            if (!actionsDescriptions[action.category]) {
+                actionsDescriptions[action.category] = [];
             }
-            actionsDescriptions[category].push(action.description);
+            actionsDescriptions[action.category].push({
+                name: action.name,
+                description: action.description,
+                response: {
+                    combatantId: "string, combatant ID.",
+                    targetId: "string, target ID.",
+                    action: "string, action name.",
+                    params: action.params,
+                }
+            });
         });
         
-        return {
-            actions: actionsDescriptions
-        };
+        return actionsDescriptions;
     }
     
     merge(other: ActionSet): void {

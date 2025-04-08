@@ -72,7 +72,7 @@ export class RuleBook {
         this.sort();
     }
 
-    toSanitizedJSON(): any {
+    toSanitizedJSON(): { [key: string]: string[] }  {
         const rulesDescriptions: { [key: string]: string[] } = {};
         this.rules.forEach(rule => {
             if (!rule.visible) return;
@@ -83,9 +83,6 @@ export class RuleBook {
             rulesDescriptions[category].push(rule.description);
         });
         
-        return {
-            name: this.name,
-            rules: rulesDescriptions
-        };
+        return rulesDescriptions;
     }
 }

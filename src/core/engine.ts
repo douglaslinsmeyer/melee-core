@@ -37,7 +37,8 @@ export class Engine {
         });
         this.ruleBook.trigger(EVENT.COMBATANTS_ADDED, match);
         this.ruleBook.trigger(EVENT.MATCH_STARTED, match);
-        logger.info("Match started");
+        logger.combat(`[MATCH:STARTED]: The match started with [${match.combatants.length}] combatants.`);
+        logger.info(`Match started with ${match.combatants.length} combatants.`);
         return match;
     }
 
@@ -50,11 +51,13 @@ export class Engine {
             return match;
         }
 
-        logger.info(`Round ${match.currentRound} started`);
+        logger.combat(`[ROUND:${match.currentRound}:STARTED]: Round No. [${match.currentRound}] started.`);
+        logger.info(`Round ${match.currentRound} started.`);
         match.combatants.sort((a, b) => b.initiative - a.initiative);
         match.combatants.forEach(combatant => {
             const action = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
-            logger.info(`Combatant ${combatant.bot.name} performed action: ${JSON.stringify(action)}`);
+            logger.info(`Combatant ${combatant.id} performed action: ${action.action} targeting ${action.target}`);
+            logger.combat(`[ROUND:${match.currentRound}:ACTION]: The combatant[${combatant.id}] performed action[${action.action}] targeting[${action.target}]`);
         });
 
         this.ruleBook.trigger(EVENT.ROUND_ENDED, match);
