@@ -7,25 +7,12 @@ import { IODriverInternal } from '../src/core/io/internal';
 import { standardRules } from '../src/core/rules/standard';
 
 const combatantBuilder = new CombatantBuilder();
-
-function loadGameEngine() {
-    const ioDriver = new IODriverInternal();
-    const ioHandler = new IOHandler(ioDriver);
-    const engine = new Engine(ioHandler, standardRules);
-
-    return engine;
-}
+const ioDriver = new IODriverInternal();
+const ioHandler = new IOHandler(ioDriver);
+const engine = new Engine(ioHandler, standardRules);
 
 describe('Game engine tests:', () => {
-    test('Test game engine initialization', () => {
-        const engine = loadGameEngine();
-        expect(engine).toBeDefined();
-        expect(engine.io).toBeDefined();
-
-    });
-
     test('Test game engine start', () => {
-
         const combatantAlpha = combatantBuilder
             .setName('Alpha-1')
             .setBot(new Bot('Alpha-1', 'A test bot', 'internal://alpha/alpha-1'))
@@ -38,7 +25,6 @@ describe('Game engine tests:', () => {
             .setLocation(new Location(1, 0, 0))
             .build();
 
-        const engine = loadGameEngine();
         const combatants = [
             combatantAlpha,
             combatantBravo
