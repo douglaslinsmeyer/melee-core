@@ -1,5 +1,5 @@
 import { Bot } from '../src/core/bot';
-import { Combatant, CombatantBuilder } from '../src/core/combatant';
+import { CombatantBuilder } from '../src/core/combatant';
 import { Location } from '../src/core/movement';
 import { Engine } from '../src/core/engine';
 import { IOHandler } from '../src/core/io';
