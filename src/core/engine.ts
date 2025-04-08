@@ -23,7 +23,6 @@ export class Engine {
             match = this.advance(match);
         }
         match = this.end(match);
-
         return match;
     }
     
@@ -42,6 +41,7 @@ export class Engine {
     advance(match: Match): Match {
         this.ruleBook.trigger(EVENT.ROUND_STARTED, match);
         match.currentRound++;
+
         if (match.currentRound > match.rounds) {
             this.end(match);
             return match;
@@ -55,7 +55,6 @@ export class Engine {
         });
 
         this.ruleBook.trigger(EVENT.ROUND_ENDED, match);
-
         return match;
     }
 
