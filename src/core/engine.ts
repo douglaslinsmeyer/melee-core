@@ -4,17 +4,18 @@ import { Match, MATCH_STATE } from "./match";
 import { RuleBook } from "./rules";
 import { EVENT } from "./events";
 import { logger } from "./logger";
-import { ActionInterface } from "./actions";
+import { ActionSet } from "./actions";
 
 export class Engine {
 
     io: IOHandler;
     ruleBook: RuleBook;
-    actions: ActionInterface[] = [];
+    actions: ActionSet;
 
     constructor(ioHandler: IOHandler) {
         this.io = ioHandler;
         this.ruleBook = new RuleBook();
+        this.actions = new ActionSet();
         logger.info("Engine initialized");
     }
 
@@ -52,7 +53,7 @@ export class Engine {
         logger.info(`Round ${match.currentRound} started`);
         match.combatants.sort((a, b) => b.initiative - a.initiative);
         match.combatants.forEach(combatant => {
-            const action = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook);
+            const action = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
             logger.info(`Combatant ${combatant.bot.name} performed action: ${JSON.stringify(action)}`);
         });
 

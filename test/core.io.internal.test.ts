@@ -1,3 +1,4 @@
+import { ActionSet } from '../src/core/actions';
 import { Bot } from '../src/core/bot';
 import { AlphaBot } from '../src/core/bots/alpha';
 import { Combatant } from '../src/core/combatant';
@@ -13,7 +14,8 @@ describe('Internal driver tests:', () => {
         const response = driver.call('internal://alpha', {
             combatant: new Combatant(new Bot('', '', ''), new Location(0,0,0), '', ''),
             match: new Match(),
-            rules: new RuleBook
+            rules: new RuleBook(),
+            actions: new ActionSet()
         });
         expect(response.id).toBe(alpha.name);
         expect(response.secret).toBe(alpha.key);

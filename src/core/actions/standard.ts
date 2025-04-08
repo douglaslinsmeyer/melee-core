@@ -1,16 +1,15 @@
-import { ActionInputInterface, ActionInterface } from "../actions";
+import { ActionInputInterface, ActionSet } from "../actions";
 import { Match } from "../match";
-import { Dice } from 'dice-typescript';
 import { logger } from "../logger";
 
-export const standardActions: ActionInterface[] = [];
+export const standardActions = new ActionSet();
 
 enum CATEGORY {
-    ATTACK = 'Attacks',
-    MOVEMENT = 'Movements',
+    ATTACK = 'ATTACKS',
+    MOVEMENT = 'MOVEMENTS',
 }
 
-standardActions.push({
+standardActions.addAction({
     name: 'core.move-toward',
     description: 'Move your combatant to a new position.',
     category: CATEGORY.MOVEMENT,

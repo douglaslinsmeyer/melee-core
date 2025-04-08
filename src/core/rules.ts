@@ -45,7 +45,7 @@ export class RuleBook {
         if (this.rules.some(r => r.name === rule.name)) {
             throw new Error(`Rule with name ${rule.name} already exists.`);
         }
-        rule.category = (!rule.category) ? RULEBOOK_DEFAULT_CATEGORY : rule.category.toLowerCase();
+        rule.category = (!rule.category) ? RULEBOOK_DEFAULT_CATEGORY : rule.category.toLowerCase().replace(' ', '_');
         if (!rule.priority) rule.priority = RULEBOOK_DEFAULT_PRIORITY;
         if (!rule.visible) rule.visible = RULEBOOK_DEFAULT_VISIBLE;
 

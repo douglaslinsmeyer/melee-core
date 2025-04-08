@@ -9,7 +9,7 @@ const dice = new Dice();
 export const standardRules = new RuleBook('core');
 
 enum RULE_CATEGORY {
-    VICTORY_CONDITIONS = 'Victory Conditions',
+    VICTORY_CONDITIONS = 'win_conditions',
 }
 
 // A rule that sets the match state to complete when the max rounds are reached
@@ -19,7 +19,6 @@ standardRules.addRule({
     category: RULE_CATEGORY.VICTORY_CONDITIONS,
     trigger: EVENT.ROUND_ENDED,
     visible: true,
-    priority: 1,
     apply: (match: Match) => {
         if (match.currentRound < match.rounds) return match;
         const maxHealth = Math.max(...match.combatants.map(c => c.health));
@@ -35,8 +34,6 @@ standardRules.addRule({
     name: 'match-status.started',
     description: 'The match status is set to "in progress" when the match starts.',
     trigger: EVENT.MATCH_STARTED,
-    visible: false,
-    priority: 1,
     apply: (match: Match) => {
         match.state = MATCH_STATE.IN_PROGRESS;
         logger.info('Match status set to in progress.');
@@ -49,8 +46,6 @@ standardRules.addRule({
     name: 'starting-stats',
     description: 'Each combatant starts with default stats.',
     trigger: EVENT.COMBATANTS_ADDED,
-    visible: false,
-    priority: 1,
     apply: (match: Match) => {
         match.combatants.forEach(combatant => {
             combatant.health = 100;
@@ -72,8 +67,6 @@ standardRules.addRule({
     name: 'roll-for-initiative',
     description: 'At the start of each round, each combatant rolls for initiative.',
     trigger: EVENT.ROUND_STARTED,
-    visible: false,
-    priority: 1,
     apply: (match: Match) => {
         match.combatants.forEach(combatant => {
             combatant.initiative = dice.roll('1d20').total + combatant.initiativeModifier;
