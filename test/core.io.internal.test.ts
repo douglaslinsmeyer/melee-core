@@ -12,7 +12,7 @@ describe('Internal driver tests:', () => {
         const alpha = new AlphaBot();
         const driver = new IODriverInternal();
         const response = driver.call('internal://alpha', {
-            combatant: new Combatant(new Bot('', '', ''), new Location(0,0,0), '', ''),
+            self: new Combatant(new Bot('', '', ''), new Location(0,0,0), '', ''),
             match: new Match(),
             rules: new RuleBook().toSanitizedJSON(),
             log: [],

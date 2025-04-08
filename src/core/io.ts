@@ -18,7 +18,7 @@ export interface IOResponse {
 }
 
 export interface IORequest {
-    combatant: Combatant;
+    self: Combatant;
     match: Match;
     log: any[];
     rules: { [key: string]: string[] };
@@ -35,7 +35,7 @@ export class IOHandler {
 
     call(uri: string,combatant: Combatant, match: Match, ruleBook: RuleBook, actions: ActionSet): IOResponse {
         return this.driver.call(uri, {
-            combatant: combatant,
+            self: combatant,
             match: match,
             log: combatLoggerArray.map(log => {
                 return log[0];

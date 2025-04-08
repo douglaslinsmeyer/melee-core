@@ -7,7 +7,7 @@ import { Combatant } from "./combatant";
  * It contains information about the rounds, combatants, and current round.
  */
 export class Match {
-    rounds: number = 1;
+    rounds: number = 3;
     currentRound: number = 0;
     combatants: Combatant[] = [];
     winners?: Combatant[];

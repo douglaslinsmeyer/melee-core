@@ -14,15 +14,15 @@ export class AlphaBot {
 
         logger.info(`AlphaBot received request: ${JSON.stringify(input)}`);
 
-        const enemies = input.match.combatants.filter(combatant => combatant.id !== input.combatant.id);
+        const enemies = input.match.combatants.filter(combatant => combatant.id !== input.self.id);
 
         if (enemies.length === 0) {
-            logger.warn(`No enemies found for combatant ${input.combatant.id}`);
+            logger.warn(`No enemies found for combatant ${input.self.id}`);
             return {
                 id: this.name, 
                 secret: this.key, 
                 action: 'WAIT', 
-                target: input.combatant.id
+                target: input.self.id
             };
         }
 
