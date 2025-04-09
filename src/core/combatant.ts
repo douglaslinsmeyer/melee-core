@@ -1,5 +1,5 @@
 import { Locatable, Location, LocationInterface, Moveable } from "./movement";
-import { StatusEffect, Affectable, StatusEffectCritera, applyEffects } from "./effects";
+import { Affectable, StatusEffectCollection } from "./effects";
 import { Bot, BotInterface } from "./bot";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -18,9 +18,6 @@ export class Combatant implements Locatable, Moveable, Affectable {
     faction: string | null = null; 
     className: string;
 
-    currentAction: string = "none";
-    currentActionTarget: string = "none";
-
     health: number = 0;
     maxHealth: number = 0;
 
@@ -37,7 +34,7 @@ export class Combatant implements Locatable, Moveable, Affectable {
     movementSpeedModifier: number = 0;
     
     location: LocationInterface;
-    statusEffects: StatusEffect[] = [];
+    effects: StatusEffectCollection; 
 
     constructor(bot: BotInterface, location: LocationInterface, name: string, className: string) {
         this.bot = bot;
@@ -45,7 +42,7 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this.name = name;
         this.className = className;
         this.location = location;
-        this.statusEffects = [];
+        this.effects = new StatusEffectCollection();
     }
 
     getAttack(): number {
@@ -72,25 +69,9 @@ export class Combatant implements Locatable, Moveable, Affectable {
         return this.health > 0;
     }
 
-    applyEffects(actors: Affectable[]): void {
-        applyEffects(actors);
-    }
-
-    addStatusEffect(effect: StatusEffect): void {
-        this.statusEffects.push(effect);
-    }
-
-    removeStatusEffects(criteria: StatusEffectCritera): void {
-        this.statusEffects = this.statusEffects.filter(effect => !criteria.matches(effect));
-    }
-
     moveToward(target: Locatable, distance: number) {
         distance = (distance > this.movementSpeed) ? this.movementSpeed : distance;
         this.location = this.location.moveToward(target.location, distance);
-    }
-
-    distanceTo(target: Locatable): number {
-        return this.location.distanceTo(target.location);
     }
 }
 

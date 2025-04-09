@@ -54,7 +54,11 @@ export class Engine {
         this.ruleBook.trigger(EVENT.ROUND_STARTED, match);
         logger.combat(`[ROUND:${match.currentRound}:STARTED]: Round No. [${match.currentRound}] started.`);
         logger.info(`Round ${match.currentRound} started.`);
-        match.combatants.sort((a, b) => b.initiative - a.initiative);
+        
+
+        // To do: Resolve status effects
+        
+        // Resolve combatant actions
         match.combatants.forEach(combatant => {
             const response = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
             const actionInput: ActionInputInterface = {

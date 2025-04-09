@@ -17,7 +17,6 @@ export interface Locatable {
  */
 export interface Moveable {
     moveToward(target: Locatable, distance: number): void;
-    distanceTo(target: Locatable): number;
 }
 
 export interface LocationInterface {
