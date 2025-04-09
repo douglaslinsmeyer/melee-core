@@ -57,7 +57,6 @@ export class Engine {
         match.combatants.sort((a, b) => b.initiative - a.initiative);
         match.combatants.forEach(combatant => {
             const response = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
-            logger.info(`Combatant ${combatant.id} performed action: ${response.action} targeting ${response.target}`);
             const actionInput: ActionInputInterface = {
                 combatantId: combatant.id,
                 targetId: response.target,

@@ -20,14 +20,14 @@ export class StatusEffectCritera {
     name: string | null = null;
     type: string | null = null;
     duration: number | null = null;
-    remainingDuration: number | null = null;
+    remaining: number | null = null;
     appliedBy: string | null = null;
 
     matches(effect: StatusEffect): boolean {
         if (this.name && this.name !== effect.name) return false;
         if (this.type && this.type !== effect.type) return false;
         if (this.duration && this.duration !== effect.duration) return false;
-        if (this.remainingDuration && this.remainingDuration !== effect.remainingDuration) return false;
+        if (this.remaining && this.remaining !== effect.remaining) return false;
         if (this.appliedBy && this.appliedBy !== effect.appliedBy) return false;
         return true;
     }
@@ -44,7 +44,7 @@ export interface StatusEffect {
     description: string;
     type: string;
     duration: number;
-    remainingDuration: number;
+    remaining: number;
     appliedBy: string;
     apply: (targets: Affectable[]) => void;
 }
@@ -65,8 +65,8 @@ export function applyEffects(actors: Affectable[]): void {
         if (actor.statusEffects.length === 0) return;
         actor.statusEffects.forEach(effect => {
             effect.apply(actors);
-            effect.remainingDuration--;
-            if (effect.remainingDuration <= 0) {
+            effect.remaining--;
+            if (effect.remaining <= 0) {
                 actor.statusEffects = actor.statusEffects.filter(e => e !== effect);
             }
         });

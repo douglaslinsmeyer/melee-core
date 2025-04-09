@@ -26,7 +26,7 @@ export class AlphaBot {
         return {
             id: this.name, 
             secret: this.key, 
-            action: 'attacks.jab', 
+            action: 'attacks.jabs', 
             target: enemies[0].id
         };
     }
