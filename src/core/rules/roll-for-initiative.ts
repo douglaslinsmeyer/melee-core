@@ -11,7 +11,7 @@ const rule: RuleInterface = {
     trigger: Event.ROUND_STARTED,
     apply: (trigger: string, match: Match) => {
         match.combatants.forEach(combatant => {
-            combatant.initiative = dice.roll('1d20').total + combatant.initiativeModifier;
+            combatant.initiative = dice.roll('1d20').total;
             logger.combat(`[INITIATIVE]: The combatant:[${combatant.id}] rolled for initiative:[${combatant.initiative}]`);
             logger.info(`Combatant ${combatant.id} rolled for initiative: ${combatant.initiative}.`);
         });

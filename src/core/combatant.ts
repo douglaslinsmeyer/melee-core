@@ -18,21 +18,23 @@ export class Combatant implements Locatable, Moveable, Affectable {
     className: string;
 
     health: number = 0;
-    maxHealth: number = 0;
+    _maxHealth: number = 0;
+    _healthModifiers: {[key: string]: number} = {};
 
-    initiative: number = 0;
-    initiativeModifier: number = 0;
+    _initiative: number = 0;
+    _initiativeModifiers: {[key: string]: number} = {};
     
-    defense: number = 0;
-    defenseModifier: number = 0;
+    _defense: number = 0;
+    _defenseModifiers: {[key: string]: number} = {};
     
-    attack: number = 0;
-    attackModifier: number = 0;
+    _attack: number = 0;
+    _attackModifiers: {[key: string]: number} = {};
 
-    movementSpeed: number = 0;
-    movementSpeedModifier: number = 0;
+    _movementSpeed: number = 0;
+    _movementSpeedModifiers: {[key: string]: number} = {};
 
-    efficacy: number = 100;
+    _efficacy: number = 100;
+    _efficacyModifiers: {[key: string]: number} = {};
     
     location: LocationInterface;
     effects: StatusEffectCollection;
@@ -46,16 +48,103 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this.effects = new StatusEffectCollection();
     }
 
-    getAttack(): number {
-        return this.attack + this.attackModifier;
+    public get maxHealth(): number {
+        return this._maxHealth + this.calculateModifierSum(this._healthModifiers);
     }
 
-    getDefense(): number {
-        return this.defense + this.defenseModifier;
+    public set maxHealth(value: number) {
+        this._maxHealth = value;
     }
 
-    getInitiative(): number {
-        return this.initiative;
+    public addMaxHealthModifier(name: string, value: number): void {
+        this._healthModifiers[name] = value;
+    }
+
+    public removeMaxHealthModifier(name: string): void {
+        delete this._healthModifiers[name];
+    }
+
+    public get attack(): number {
+        return this._attack + this.calculateModifierSum(this._attackModifiers);
+    }
+
+    public set attack(value: number) {
+        this._attack = value;
+    }
+
+    public addAttackModifier(name: string, value: number): void {
+        this._attackModifiers[name] = value;
+    }
+
+    public removeAttackModifier(name: string): void {
+        delete this._attackModifiers[name];
+    }
+    
+    public get defense(): number {
+        return this._defense + this.calculateModifierSum(this._defenseModifiers);
+    }
+
+    public set defense(value: number) {
+        this._defense = value;
+    }
+    public addDefenseModifier(name: string, value: number): void {
+        this._defenseModifiers[name] = value;
+    }
+
+    public removeDefenseModifier(name: string): void {
+        delete this._defenseModifiers[name];
+    }
+
+    public get initiative(): number {
+        return this._initiative + this.calculateModifierSum(this._initiativeModifiers);
+    }
+
+    public set initiative(value: number) {
+        this._initiative = value;
+    }
+
+    public addInitiativeModifier(name: string, value: number): void {
+        this._initiativeModifiers[name] = value;
+    }
+
+    public removeInitiativeModifier(name: string): void {
+        delete this._initiativeModifiers[name];
+    }
+
+    public get efficacy(): number {
+        return this._efficacy + this.calculateModifierSum(this._efficacyModifiers);
+    }
+
+    public set efficacy(value: number) {
+        this._efficacy = value;
+    }
+
+    public get efficacyPercentage(): number {
+        return this.efficacy / 100;
+    }
+
+    public addEfficacyModifier(name: string, value: number): void {
+        this._efficacyModifiers[name] = value;
+    }
+
+    public removeEfficacyModifier(name: string): void {
+        delete this._efficacyModifiers[name];
+    }
+
+    public get movementSpeed(): number {
+        return this._movementSpeed + this.calculateModifierSum(this._movementSpeedModifiers);
+    }
+
+    public set movementSpeed(value: number) {
+        this._movementSpeed = value;
+    }
+
+    public addMovementSpeedModifier(name: string, value: number): void {
+        this._movementSpeedModifiers[name] = value;
+    }
+
+    public removeMovementSpeedModifier(name: string): void {
+        delete this._movementSpeedModifiers[name];
     }
 
     damage(amount: number): void {
@@ -73,5 +162,9 @@ export class Combatant implements Locatable, Moveable, Affectable {
     moveToward(target: Locatable, distance: number) {
         distance = (distance > this.movementSpeed) ? this.movementSpeed : distance;
         this.location = this.location.moveToward(target.location, distance);
+    }
+
+    private calculateModifierSum(modifiers: {[key: string]: number}): number {
+        return Object.values(modifiers).reduce((sum, value) => sum + value, 0);
     }
 }

@@ -14,7 +14,7 @@ const action: ActionInterface = {
             throw new Error('Invalid input: combatant or target not found.');
         }
 
-        const damage = dice.roll('2d6').total + self.getAttack() - target.getDefense();
+        const damage = (dice.roll('2d4').total * self.efficacyPercentage) + self.attack - target.defense;
         target.damage(damage);
         logger.combat(`[ACTION] Combatant: [${self.id}] attacked target: [${target.id}] with jab for [${damage}] damage.`);
         logger.info(`Combatant ${self.id} attacked target ${target.id} with jab for ${damage} damage.`);

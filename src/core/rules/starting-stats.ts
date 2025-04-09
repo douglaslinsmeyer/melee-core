@@ -12,9 +12,10 @@ const rule: RuleInterface = {
         match.combatants.forEach(combatant => {
             combatant.health = 100;
             combatant.maxHealth = 100;
-            combatant.initiativeModifier = 0;
-            combatant.attackModifier = 0;
-            combatant.defenseModifier = 0;
+            combatant.initiative = 0;
+            combatant.attack = 0;
+            combatant.defense = 0;
+            combatant.movementSpeed = 5;
             logger.info(`Combatant ${combatant.bot.name} assigned starting stats.`);
         });
         logger.info('All combatants have been assigned starting stats.');
