@@ -1,5 +1,11 @@
 import { Combatant } from "./combatant";
 
+export enum State {
+    PENDING = "match.PENDING",
+    IN_PROGRESS = "match.in_progress",
+    COMPLETE = "match.complete"
+}
+
 /**
  * Match class
  * 
@@ -11,7 +17,7 @@ export class Match {
     currentRound: number = 0;
     combatants: Combatant[] = [];
     winners: Combatant[] = [];
-    state: MATCH_STATE = MATCH_STATE.PENDING;
+    state: State = State.PENDING;
 
     constructor(rounds?: number, currentRound?: number, combatants?: Combatant[]) {
         if (rounds) this.rounds = rounds;
@@ -25,10 +31,12 @@ export class Match {
         }
         this.combatants.push(combatant);
     }
-}
 
-export enum MATCH_STATE {
-    PENDING = "match.pending",
-    IN_PROGRESS = "match.in_progress",
-    COMPLETE = "match.complete"
+    getCombatant(id: string): Combatant {
+        const combatant = this.combatants.find(c => c.id === id);
+        if (!combatant) {
+            throw new Error(`Combatant with id ${id} not found`);
+        }
+        return combatant;
+    }
 }

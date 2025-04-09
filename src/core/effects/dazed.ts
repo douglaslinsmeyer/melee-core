@@ -13,7 +13,7 @@ export default function (appliedBy: string, appliedTo: string): StatusEffect {
         tier: 0,
         duration: duration,
         apply: (match: Match) => {
-            
+            const self = match.getCombatant(appliedTo);
         },
     }
 

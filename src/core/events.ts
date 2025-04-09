@@ -1,4 +1,4 @@
-export enum EVENT {
+export enum Event {
 
     PRE_COMBATANT_ADDED = "combatant.added.pre",
     POST_COMBATANT_ADDED = "combatant.added.post",

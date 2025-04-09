@@ -1,6 +1,6 @@
 import { logger } from '../logger';
 import { Match } from '../match';
-import { EVENT } from '../events';
+import { Event } from '../events';
 import { RuleInterface } from '../rules';
 import { dice } from '../dice';
 
@@ -8,7 +8,7 @@ import { dice } from '../dice';
 const rule: RuleInterface = {
     name: 'roll-for-initiative',
     description: 'At the start of each round, each combatant rolls for initiative.',
-    trigger: EVENT.ROUND_STARTED,
+    trigger: Event.ROUND_STARTED,
     apply: (trigger: string, match: Match) => {
         match.combatants.forEach(combatant => {
             combatant.initiative = dice.roll('1d20').total + combatant.initiativeModifier;
