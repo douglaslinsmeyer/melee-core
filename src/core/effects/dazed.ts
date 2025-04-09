@@ -1,25 +1,20 @@
-import { StatusEffectInterface, Type } from '../effects';
+import { StatusEffect, Type, TargetScope } from '../effects';
+import { Match } from '../match';
 
-export default function (appliedBy: string, appliedTo: string): StatusEffectInterface {
+export default function (appliedBy: string, appliedTo: string): StatusEffect {
 
     const duration = 3;
 
-    const effect: StatusEffectInterface = {
+    const effect: StatusEffect = {
         name: "Dazed",
         description: "The target is dazed and cannot act.",
-        type: Type.Debuff,
+        type: Type.Detrimental,
+        targetScope: TargetScope.All,
+        tier: 0,
         duration: duration,
-        remaining: duration,
-        appliedBy: appliedBy,
-        appliedTo: appliedTo,
-        apply: (match) => {
-            const self = match.combatants.find(c => c.id === appliedTo);
-            if (!self) {
-                throw new Error(`Combatant with ID ${appliedTo} not found.`);
-            }
-
-            self.
-        }
+        apply: (match: Match) => {
+            
+        },
     }
 
     return effect;

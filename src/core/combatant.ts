@@ -14,8 +14,7 @@ export class Combatant implements Locatable, Moveable, Affectable {
     bot: BotInterface;
     
     id: string;
-    name: string;
-    faction: string | null = null; 
+    faction: string;
     className: string;
 
     health: number = 0;
@@ -32,14 +31,16 @@ export class Combatant implements Locatable, Moveable, Affectable {
 
     movementSpeed: number = 0;
     movementSpeedModifier: number = 0;
+
+    efficacy: number = 100;
     
     location: LocationInterface;
-    effects: StatusEffectCollection; 
+    effects: StatusEffectCollection;
 
-    constructor(bot: BotInterface, location: LocationInterface, name: string, className: string) {
+    constructor(bot: BotInterface, location: LocationInterface = new Location(0,0,0), className: string = 'default', faction: string = uuidv4()) {
         this.bot = bot;
         this.id = uuidv4();
-        this.name = name;
+        this.faction = faction;
         this.className = className;
         this.location = location;
         this.effects = new StatusEffectCollection();
@@ -72,48 +73,5 @@ export class Combatant implements Locatable, Moveable, Affectable {
     moveToward(target: Locatable, distance: number) {
         distance = (distance > this.movementSpeed) ? this.movementSpeed : distance;
         this.location = this.location.moveToward(target.location, distance);
-    }
-}
-
-export class CombatantBuilder {
-    combatant: Combatant;
-
-    constructor() {
-        this.combatant = this.reset();
-    }
-
-    reset() {
-        return new Combatant(
-            new Bot('', '', ''),
-            new Location(0, 0, 0),
-            'default',
-            'default'
-        );
-    }
-
-    setName(name: string): CombatantBuilder {
-        this.combatant.name = name;
-        return this;
-    }
-
-    setClassName(className: string): CombatantBuilder {
-        this.combatant.className = className;
-        return this;
-    }
-
-    setBot(bot: BotInterface): CombatantBuilder {
-        this.combatant.bot = bot;
-        return this;
-    }
-
-    setLocation(location: LocationInterface): CombatantBuilder {
-        this.combatant.location = location;
-        return this;
-    }
-
-    build(): Combatant {
-        const combatant = this.combatant;
-        this.combatant = this.reset();
-        return combatant;
     }
 }

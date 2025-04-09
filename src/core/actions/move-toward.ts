@@ -18,7 +18,7 @@ const action: ActionInterface = {
         
         self.location.moveToward(target.location, self.movementSpeed);
         logger.combat(`[ACTION] Combatant: [${self.id}] moved toward target: [${target.id}].`);
-        logger.info(`Combatant ${self.name} is now ${self.location.distanceTo(target.location)} units away from ${target.name}.`);
+        logger.info(`Combatant ${self.id} is now ${self.location.distanceTo(target.location)} units away from ${target.id}.`);
 
         return match;
     }
