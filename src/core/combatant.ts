@@ -48,6 +48,30 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this.statusEffects = [];
     }
 
+    getAttack(): number {
+        return this.attack + this.attackModifier;
+    }
+
+    getDefense(): number {
+        return this.defense + this.defenseModifier;
+    }
+
+    getInitiative(): number {
+        return this.initiative;
+    }
+
+    damage(amount: number): void {
+        this.health = Math.max(0, this.health - amount);
+    }
+
+    heal(amount: number): void {
+        this.health = Math.min(this.maxHealth, this.health + amount);
+    }
+
+    isAlive(): boolean {
+        return this.health > 0;
+    }
+
     applyEffects(actors: Affectable[]): void {
         applyEffects(actors);
     }

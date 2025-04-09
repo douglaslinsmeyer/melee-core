@@ -1,18 +1,10 @@
-import { ActionInputInterface, ActionSet } from "../actions";
-import { Match } from "../match";
-import { logger } from "../logger";
+import { ActionInterface, ActionInputInterface } from '../actions';
+import { Match } from '../match';
+import { logger } from '../logger';
 
-export const standardActions = new ActionSet();
-
-enum CATEGORY {
-    ATTACK = 'ATTACKS',
-    MOVEMENT = 'MOVEMENTS',
-}
-
-standardActions.addAction({
-    name: 'core.move-toward',
+const action: ActionInterface = {
+    name: 'movements.move.toward',
     description: 'Move your combatant to a new position.',
-    category: CATEGORY.MOVEMENT,
     params: {
         exampleProperty: "string, some example property.",
     },
@@ -30,4 +22,6 @@ standardActions.addAction({
 
         return match;
     }
-});
+}
+
+export default action;

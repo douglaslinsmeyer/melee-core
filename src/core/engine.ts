@@ -4,7 +4,10 @@ import { Match, MATCH_STATE } from "./match";
 import { RuleBook } from "./rules";
 import { EVENT } from "./events";
 import { logger } from "./logger";
-import { ActionSet } from "./actions";
+import { ActionSet, ActionInputInterface } from "./actions";
+
+const infiniteLoopMaxRounds = 100;
+const infiniteLoopMaxRoundsMessage = `Infinite loop detected. The match has been stopped after ${infiniteLoopMaxRounds} rounds.`;
 
 export class Engine {
 
@@ -23,6 +26,10 @@ export class Engine {
         let match = new Match();
         match = this.start(match, combatants);
         while (match.state !== MATCH_STATE.COMPLETE) {
+            if (match.currentRound > infiniteLoopMaxRounds) {
+                logger.error(infiniteLoopMaxRoundsMessage);
+                throw new Error(infiniteLoopMaxRoundsMessage);
+            }
             match = this.advance(match);
         }
         match = this.end(match);
@@ -43,21 +50,22 @@ export class Engine {
     }
 
     advance(match: Match): Match {
-        this.ruleBook.trigger(EVENT.ROUND_STARTED, match);
         match.currentRound++;
-
-        if (match.currentRound > match.rounds) {
-            this.end(match);
-            return match;
-        }
-
+        this.ruleBook.trigger(EVENT.ROUND_STARTED, match);
         logger.combat(`[ROUND:${match.currentRound}:STARTED]: Round No. [${match.currentRound}] started.`);
         logger.info(`Round ${match.currentRound} started.`);
         match.combatants.sort((a, b) => b.initiative - a.initiative);
         match.combatants.forEach(combatant => {
-            const action = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
-            logger.info(`Combatant ${combatant.id} performed action: ${action.action} targeting ${action.target}`);
-            logger.combat(`[ROUND:${match.currentRound}:ACTION]: The combatant[${combatant.id}] performed action[${action.action}] targeting[${action.target}]`);
+            const response = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
+            logger.info(`Combatant ${combatant.id} performed action: ${response.action} targeting ${response.target}`);
+            const actionInput: ActionInputInterface = {
+                combatantId: combatant.id,
+                targetId: response.target,
+                action: response.action,
+                params: response.params
+            };
+            match = this.actions.find(response.action).apply(actionInput, match);
+            this.ruleBook.trigger(EVENT.ACTION_PERFORMED, match);
         });
 
         this.ruleBook.trigger(EVENT.ROUND_ENDED, match);
@@ -66,6 +74,12 @@ export class Engine {
 
     end(match: Match): Match {
         this.ruleBook.trigger(EVENT.MATCH_ENDED, match);
-        return match
+        logger.combat(`[MATCH:ENDED]: The match ended. The winner(s) are: [${match.winners.map(w => w.id).join(", ")}]`);
+        logger.info(`Match ended. The winner(s) are: ${match.winners.map(w => w.id).join(", ")}`);
+        for (const combatant of match.combatants) {
+            this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
+            logger.info(`Combatant ${combatant.id} received end of match notification.`);
+        }
+        return match;
     }
 }

@@ -10,7 +10,7 @@ export class Match {
     rounds: number = 3;
     currentRound: number = 0;
     combatants: Combatant[] = [];
-    winners?: Combatant[];
+    winners: Combatant[] = [];
     state: MATCH_STATE = MATCH_STATE.PENDING;
 
     constructor(rounds?: number, currentRound?: number, combatants?: Combatant[]) {

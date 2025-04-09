@@ -11,17 +11,14 @@ export class AlphaBot {
     }
 
     respond(input: IORequest): IOResponse {
-
-        logger.info(`AlphaBot received request: ${JSON.stringify(input)}`);
-
+        //logger.info(`AlphaBot received request: ${JSON.stringify(input)}`);
         const enemies = input.match.combatants.filter(combatant => combatant.id !== input.self.id);
-
         if (enemies.length === 0) {
             logger.warn(`No enemies found for combatant ${input.self.id}`);
             return {
                 id: this.name, 
                 secret: this.key, 
-                action: 'WAIT', 
+                action: 'movements.wait', 
                 target: input.self.id
             };
         }
@@ -29,7 +26,7 @@ export class AlphaBot {
         return {
             id: this.name, 
             secret: this.key, 
-            action: 'ATTACK', 
+            action: 'attacks.jab', 
             target: enemies[0].id
         };
     }

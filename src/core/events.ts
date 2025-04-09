@@ -8,6 +8,8 @@ export enum EVENT {
     MATCH_STARTED = "match.started",
 
     ROUND_STARTED = "round.started",
+
+    ACTION_PERFORMED = "action.performed",
     
     ROUND_ENDED = "round.ended",
 

@@ -1,4 +1,7 @@
 import { Match } from './match';
+import ActionWait from './actions/wait';
+import ActionJab from './actions/jab';
+import ActionMoveToward from './actions/move-toward';
 
 export interface ActionInputInterface {
     combatantId: string;
@@ -10,7 +13,6 @@ export interface ActionInputInterface {
 export interface ActionInterface {
     name: string;
     description: string;
-    category: string;
     params?: Record<string, string>;
     apply: (input: ActionInputInterface, state: Match) => Match;
 }
@@ -27,13 +29,18 @@ export class ActionSet {
         this.actions.push(action);
     }
 
+    find(name: string): ActionInterface {
+        const action = this.actions.find(a => a.name === name.toLowerCase());
+        if (!action) {
+            throw new Error(`Action with name ${name} not found.`);
+        }
+        return action;
+    }
+
     toSanitizedJSON(): Record<string, any> {
-        const actionsDescriptions: { [key: string]: object[] } = {};
+        const actionsDescriptions: Record<string, any>[] = [];
         this.actions.forEach(action => {
-            if (!actionsDescriptions[action.category]) {
-                actionsDescriptions[action.category] = [];
-            }
-            actionsDescriptions[action.category].push({
+            actionsDescriptions.push({
                 name: action.name,
                 description: action.description,
                 response: {
@@ -44,7 +51,7 @@ export class ActionSet {
                 }
             });
         });
-        
+        actionsDescriptions.sort((a, b) => a.name.localeCompare(b.name));
         return actionsDescriptions;
     }
     
@@ -52,3 +59,8 @@ export class ActionSet {
         this.actions = [...this.actions, ...other.actions];
     }
 }
+
+export const standardActions = new ActionSet();
+standardActions.addAction(ActionWait);
+standardActions.addAction(ActionJab);
+standardActions.addAction(ActionMoveToward);

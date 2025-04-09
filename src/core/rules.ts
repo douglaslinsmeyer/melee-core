@@ -1,4 +1,8 @@
 import { Match } from './match';
+import MaxRounds from './rules/max-rounds';
+import RollForInitiative from './rules/roll-for-initiative';
+import MatchStatus from './rules/match-status';
+import StartingStats from './rules/starting-stats';
 
 /**
  * Rule interface
@@ -6,14 +10,18 @@ import { Match } from './match';
  * This interface represents a rule in the game.
  * It has a name, description, class, and methods to apply the rule.
  */
-export interface Rule {
+export interface RuleInterface {
     name: string;
     description: string;
-    trigger: string;
+    trigger: string|string[];
     category?: string;
     priority?: number;
     visible?: boolean;
-    apply: (match: Match) => Match;
+    apply: (trigger: string, match: Match) => Match;
+}
+
+export enum Category {
+    VictoryConditions = 'win_conditions',
 }
 
 const RULEBOOK_DEFAULT_NAME = "default";
@@ -30,7 +38,7 @@ const RULEBOOK_DEFAULT_CATEGORY = "default";
 export class RuleBook {
 
     name: string = RULEBOOK_DEFAULT_NAME;
-    rules: Rule[] = [];
+    rules: RuleInterface[] = [];
 
     constructor(name?: string) {
         if (name) this.name = name;
@@ -40,10 +48,13 @@ export class RuleBook {
         this.rules.sort((a, b) => (a.priority ?? RULEBOOK_DEFAULT_PRIORITY) - (b.priority ?? RULEBOOK_DEFAULT_PRIORITY));
     }
 
-    addRule(rule: Rule): void {
+    addRule(rule: RuleInterface): void {
         rule.name = rule.name.toLowerCase();
         if (this.rules.some(r => r.name === rule.name)) {
             throw new Error(`Rule with name ${rule.name} already exists.`);
+        }
+        if (!Array.isArray(rule.trigger)) {
+            rule.trigger = [rule.trigger];
         }
         rule.category = (!rule.category) ? RULEBOOK_DEFAULT_CATEGORY : rule.category.toLowerCase().replace(' ', '_');
         if (!rule.priority) rule.priority = RULEBOOK_DEFAULT_PRIORITY;
@@ -55,8 +66,8 @@ export class RuleBook {
 
     trigger(trigger: string, state: Match): Match {
         this.rules.forEach(rule => {
-            if (rule.trigger === trigger) {
-                state = rule.apply(state);
+            if (rule.trigger.includes(trigger)) {
+                state = rule.apply(trigger, state);
             }
         });
         return state;
@@ -86,3 +97,9 @@ export class RuleBook {
         return rulesDescriptions;
     }
 }
+
+export const standardRules = new RuleBook('core');
+standardRules.addRule(MaxRounds(10));
+standardRules.addRule(RollForInitiative);
+standardRules.addRule(MatchStatus);
+standardRules.addRule(StartingStats);

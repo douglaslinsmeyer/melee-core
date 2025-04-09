@@ -8,7 +8,7 @@ describe('Ruleset tests:', () => {
             name: 'core.rule-1',
             description: 'Rule 1 description',
             trigger: 'onStart',
-            apply: (match) => match,
+            apply: (trigger, match) => match,
             priority: 2,
             visible: true
         });
@@ -17,7 +17,7 @@ describe('Ruleset tests:', () => {
             name: 'core.rule-2',
             description: 'Rule 2 description',
             trigger: 'onStart',
-            apply: (match) => match,
+            apply: (trigger, match) => match,
             priority: 1,
             visible: true
         });

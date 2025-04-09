@@ -4,8 +4,8 @@ import { Location } from '../src/core/movement';
 import { Engine } from '../src/core/engine';
 import { IOHandler } from '../src/core/io';
 import { IODriverInternal } from '../src/core/io/internal';
-import { standardRules } from '../src/core/rules/standard';
-import { standardActions } from '../src/core/actions/standard';
+import { standardActions } from '../src/core/actions';
+import { standardRules } from '../src/core/rules';
 
 const combatantBuilder = new CombatantBuilder();
 const ioDriver = new IODriverInternal();
