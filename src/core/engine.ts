@@ -3,7 +3,7 @@ import { IOHandler } from "./io";
 import { Match, State as MatchState } from "./match";
 import { RuleBook } from "./rules";
 import { Event } from "./events";
-import { logger } from "./logger";
+import { logger, combatLoggerArray } from "./logger";
 import { ActionSet, ActionInputInterface } from "./actions";
 
 const infiniteLoopMaxRounds = 100;
@@ -33,6 +33,9 @@ export class Engine {
             match = this.advance(match);
         }
         match = this.end(match);
+
+        logger.info(combatLoggerArray.map(obj => obj[0]).join("\n"));
+
         return match;
     }
     

@@ -1,18 +1,19 @@
 import { logger } from "./logger";
 import { Match } from "./match";
+import { v4 as uuidv4 } from 'uuid';
 
 export enum Type {
-    Beneficial,
-    Neutral,
-    Detrimental,
+    Beneficial = 'Beneficial',
+    Neutral = 'Neutral',
+    Detrimental = 'Detrimental',
 }
 
 export enum TargetScope {
-    Self,
-    Other,
-    Faction,
-    Enemy,
-    All
+    Self = 'Self',
+    Other = 'Other',
+    Ally = 'Ally',
+    Enemy = 'Enemy',
+    All = 'All'
 }
 
 
@@ -32,15 +33,14 @@ export interface Affectable {
  * This interface defines the structure of a status effect
  * that can be applied to an actor in the game.
  */
-export interface StatusEffect {
+export interface StatusEffectInterface {
     name: string;
     description: string;
     domain?: string;
     tier: number;
     type: Type;
     targetScope: TargetScope;
-    duration: number;
-    apply: (match: Match) => void;
+    apply: (match: Match, source: string, target: string) => void;
 }
 
 /**
@@ -49,19 +49,23 @@ export interface StatusEffect {
  * This class represents an instance of a status effect applied to an actor.
  */
 class StatusEffectInstance {
-    model: StatusEffect;
+    model: StatusEffectInterface;
     id: string;
     source: string;
     target: string;
     remaining: number;
 
-    constructor(effect: StatusEffect, source: string, target: string) {
+    constructor(effect: StatusEffectInterface, source: string, target: string, duration: number) {
         this.model = effect;
         this.id = uuidv4();
         this.source = source;
         this.target = target;
-        this.remaining = effect.duration;
+        this.remaining = duration;
     }
+}
+
+export function StatusEffect(effect: StatusEffectInterface, source: string, target: string, duration: number): StatusEffectInstance {
+    return new StatusEffectInstance(effect, source, target, duration);
 }
 
 /**
@@ -92,7 +96,7 @@ export class StatusEffectCollection {
 
     tick(match: Match): void {
         this.effects.forEach(effect => {
-            effect.model.apply(match);
+            effect.model.apply(match, effect.source, effect.target);
             effect.remaining--;
             if (effect.remaining <= 0) this.remove(effect);
         });
@@ -128,8 +132,4 @@ export class StatusEffectCollection {
 
         return false;
     }
-}
-
-function uuidv4(): string {
-    throw new Error("Function not implemented.");
 }

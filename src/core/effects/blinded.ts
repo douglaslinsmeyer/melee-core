@@ -1,15 +1,15 @@
-import { Type, TargetScope, StatusEffectInterface } from '../effects';
+import { StatusEffectInterface, Type, TargetScope } from '../effects';
 import { Match } from '../match';
 
 const effect: StatusEffectInterface = {
-    name: "Dazed",
-    description: "The target is dazed and is sluggish and disoriented.",
+    name: "Blinded",
+    description: "The target is blinded and cannot see.",
     type: Type.Detrimental,
     targetScope: TargetScope.All,
     tier: 0,
     apply: (match: Match, source: string, target: string): void => {
         const self = match.getCombatant(target);
-        self.efficacy = 50;
+        self.efficacy = 10;
     },
 }
 

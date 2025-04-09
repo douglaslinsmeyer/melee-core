@@ -11,7 +11,6 @@ export class AlphaBot {
     }
 
     respond(input: IORequest): IOResponse {
-        //logger.info(`AlphaBot received request: ${JSON.stringify(input)}`);
         const enemies = input.match.combatants.filter(combatant => combatant.id !== input.self.id);
         if (enemies.length === 0) {
             logger.warn(`No enemies found for combatant ${input.self.id}`);
