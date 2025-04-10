@@ -18,7 +18,7 @@ export interface ActionInterface {
     description: string;
     type: ActionType;
     params?: Record<string, string>;
-    apply: (input: ActionInputInterface, state: Match) => Match;
+    apply(input: ActionInputInterface, state: Match): void;
 }
 
 export class ActionSet {

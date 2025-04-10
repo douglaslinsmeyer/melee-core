@@ -1,5 +1,6 @@
 import { IORequest, IOResponse } from "../io";
 import { logger } from "../logger";
+import { dice } from '../dice';
 
 export class AlphaBot {
     name: string;
@@ -22,10 +23,13 @@ export class AlphaBot {
             };
         }
 
+        const number = dice.roll('1d20').total;
+        const action = (number > 10) ? 'offense.jabs' : 'defense.block';
+        
         return {
             id: this.name, 
-            secret: this.key, 
-            action: 'offense.jabs', 
+            secret: this.key,
+            action: action, 
             target: enemies[0].id
         };
     }

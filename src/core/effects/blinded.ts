@@ -7,22 +7,19 @@ const effect: StatusEffectInterface = {
     type: EffectType.Detrimental,
     targetScope: TargetScope.All,
     tier: 0,
-    apply: (effect: StatusEffectInstance, match: Match): Match => {
+    apply: (effect: StatusEffectInstance, match: Match): void => {
         const self = match.getCombatant(effect.target);
         self.addEfficacyModifier({
             id: effect.id,
-            name: "Blinded",
+            name: effect.model.name,
             value: -90,
         });
-        return match;
     },
-    tick: (effect: StatusEffectInstance, match: Match): Match => {
-        return match;
+    tick: (effect: StatusEffectInstance, match: Match): void => {
     },
-    reset: (effect: StatusEffectInstance, match: Match): Match => {
+    reset: (effect: StatusEffectInstance, match: Match): void => {
         const self = match.getCombatant(effect.target);
         self.removeEfficacyModifier(effect.id);
-        return match;
     },
 }
 

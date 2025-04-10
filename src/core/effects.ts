@@ -43,9 +43,9 @@ export interface StatusEffectInterface {
     tier: number;
     type: EffectType;
     targetScope: TargetScope;
-    apply: (effect: StatusEffectInstance, match: Match) => Match;
-    tick: (effect: StatusEffectInstance, match: Match) => Match;
-    reset: (effect: StatusEffectInstance, match: Match) => Match;
+    apply(effect: StatusEffectInstance, match: Match): void;
+    tick(effect: StatusEffectInstance, match: Match): void;
+    reset(effect: StatusEffectInstance, match: Match): void;
 }
 
 /**
@@ -82,23 +82,22 @@ export class StatusEffectCollection {
     
     effects: StatusEffectInstance[] = [];
 
-    add(effect: StatusEffectInstance, match: Match): Match {
-        if (this.isInvalidTargetForEffect(effect)) return match;
-        if (this.alreadyHasBetter(effect)) return match;
+    add(effect: StatusEffectInstance, match: Match): void {
+        if (this.isInvalidTargetForEffect(effect, match)) return;
+        if (this.alreadyHasBetter(effect, match)) return;
         this.effects.push(effect);
-        match = effect.model.apply(effect, match);
-        return match;
+        effect.model.apply(effect, match);
     }
 
-    remove(effect: StatusEffectInstance, match: Match): Match {
+    remove(effect: StatusEffectInstance, match: Match): void {
         const index = this.effects.findIndex(e => e.id === effect.id);
-        if (index === -1) return match;
+        if (index === -1) return;
         this.effects.splice(index, 1);
-        match = effect.model.reset(effect, match);
-        return match;
+        effect.model.reset(effect, match);
+        logger.combat(`[EFFECT] Effect: [${effect.model.name}] has been removed from target: [${effect.target}].`);
     }
 
-    tick(match: Match): Match {
+    tick(match: Match): void {
         this.effects.forEach(effect => {
             effect.remaining--;
             if (effect.remaining <= 0) {
@@ -107,22 +106,21 @@ export class StatusEffectCollection {
             }
             effect.model.tick(effect, match);
         });
-        return match;
     }
 
-    private alreadyHasBetter(effect: StatusEffectInstance): boolean {
+    private alreadyHasBetter(effect: StatusEffectInstance, match: Match): boolean {
         if (!effect.model.domain) return false;
         const existingEffect = this.effects.find(e => e.model.domain === effect.model.domain);
         if (!existingEffect) return false;
-        if (existingEffect.model.tier > effect.model.tier) {
-            logger.combat(`[EFFECT:INVALID] Effect: [${effect.model.name}] is not better than the existing effect: [${existingEffect.model.name}] in the same domain: [${effect.model.domain}].`);
-            return true;
-        }
+        if (existingEffect.model.tier > effect.model.tier) return true;
+        if (existingEffect.remaining > effect.remaining) return true;
+
+        this.remove(existingEffect, match);
 
         return false;
     }
 
-    private isInvalidTargetForEffect(effect: StatusEffectInstance): boolean {
+    private isInvalidTargetForEffect(effect: StatusEffectInstance, match: Match): boolean {
         if (effect.model.targetScope === TargetScope.Self && effect.target !== effect.source) {
             logger.combat(`[EFFECT:INVALID] Effect: [${effect.model.name}] is a self-only effect and cannot be applied to: [${effect.target}] by [${effect.source}].`);
             return true;
