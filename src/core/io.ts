@@ -33,15 +33,15 @@ export class IOHandler {
         this.driver = driver;
     }
 
-    call(uri: string,combatant: Combatant, match: Match, ruleBook: RuleBook, actions: ActionSet): IOResponse {
+    call(uri: string,combatant: Combatant, match: Match): IOResponse {
         return this.driver.call(uri, {
             self: combatant,
             match: match,
             log: combatLoggerArray.map(log => {
                 return log[0];
             }),
-            rules: ruleBook.toSanitizedJSON(),
-            actions: actions.toSanitizedJSON()
+            rules: match.ruleBook.toSanitizedJSON(),
+            actions: match.actionSet.toSanitizedJSON()
         });
     }
 }

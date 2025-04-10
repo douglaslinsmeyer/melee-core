@@ -1,17 +1,15 @@
-import { ActionInterface, ActionInputInterface, ActionType } from '../actions';
+import { ActionInterface, ActionInputInterface, ActionType, ActionInstanceInterface } from '../actions';
 import { Match } from '../match';
 import { logger } from '../logger';
 
-const action: ActionInterface = {
-    name: 'movements.move.toward',
-    description: 'Move your combatant to a new position.',
-    type: ActionType.NEUTRAL,
-    params: {
-        exampleProperty: "string, some example property.",
-    },
-    apply: (input: ActionInputInterface, match: Match): void => {
-        const self = match.combatants.find(c => c.id === input.combatantId);
-        const target = match.combatants.find(c => c.id === input.targetId);
+export class MoveTowardAction implements ActionInterface {
+    name: string = 'movements.move.toward';
+    description: string = 'Move your combatant to a new position.';
+    type: ActionType = ActionType.NEUTRAL;
+    params?: Record<string, string>;
+    apply(instance: ActionInstanceInterface, match: Match): void {
+        const self = match.combatants.find(c => c.id === instance.input.combatantId);
+        const target = match.combatants.find(c => c.id === instance.input.targetId);
         if (!self || !target) {
             logger.error('Invalid input: combatant or target not found.');
             throw new Error('Invalid input: combatant or target not found.');
@@ -22,5 +20,3 @@ const action: ActionInterface = {
         logger.info(`Combatant ${self.id} is now ${self.location.distanceTo(target.location)} units away from ${target.id}.`);
     }
 }
-
-export default action;

@@ -1,34 +1,24 @@
 import { logger } from '../logger';
 import { Match } from '../match';
 import { Event } from '../events';
-import { RuleInterface } from '../rules';
-import { ActionInputInterface, ActionType } from '../actions';
+import { RuleCategory, RuleInterface } from '../rules';
 import { EffectType } from '../effects';
 
-// A rule that sets the match state to complete when the max rounds are reached
-const rule: RuleInterface = {
-    name: 'offensive-ations',
-    description: 'This rule applies any time an offensive action is performed.',
-    trigger: Event.ACTION_PERFORMED,
-    apply: (trigger: string, match: Match, action?: ActionInputInterface) => {
-        if (!action) {
-            logger.error('Invalid input: action not found.');
-            throw new Error('Invalid input: action not found.');
+export class OffensiveActionsRule implements RuleInterface {
+    name: string = 'offensive-actions';
+    description: string = 'This rule applies any time an offensive action is performed.';
+    trigger: Event[] = [Event.ACTION_PERFORMED];
+    visible: boolean = false;
+    category: string = RuleCategory.CORE;
+    priority: number = 1;
+    apply(trigger: string, match: Match): void {
+        const combatant = match.combatants.find(c => c.id === match.lastAction?.input.combatantId);
+        // check if the combatant has any defensive effects active
+        const defensiveEffects = combatant?.effects.effects.filter(e => e.model.type === EffectType.DEFENSIVE);
+        if (defensiveEffects && defensiveEffects.length > 0) {
+            defensiveEffects.forEach(effect => {
+                combatant?.effects.remove(effect, match);
+            });
         }
-        const self = match.combatants.find(c => c.id === action.combatantId);
-        if (!self) {
-            logger.error('Invalid input: combatant not found.');
-            throw new Error('Invalid input: combatant not found.');``
-        }
-
-        // Clear any defensive effects since the combatant is now offensive
-        const defensiveEffects = self.effects.effects.filter(e => e.model.type === EffectType.Defensive);
-        defensiveEffects.forEach(effect => {
-            self.effects.remove(effect, match);
-        });
-
-        return match;
     }
 }
-
-export default rule;

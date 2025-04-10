@@ -1,5 +1,5 @@
 import { Match } from './match';
-import { ActionInputInterface, ActionInterface } from './actions';
+import { ActionInputInterface } from './actions';
 
 /**
  * Rule interface
@@ -14,11 +14,12 @@ export interface RuleInterface {
     category?: string;
     priority?: number;
     visible?: boolean;
-    apply(trigger: string, match: Match, action?: ActionInputInterface): void;
+    apply(trigger: string, match: Match): void;
 }
 
-export enum Category {
-    VictoryConditions = 'win_conditions',
+export enum RuleCategory {
+    VICTORY_CONDITION = 'win_conditions',
+    CORE = 'core',
 }
 
 const RULEBOOK_DEFAULT_NAME = "default";
@@ -61,10 +62,10 @@ export class RuleBook {
         this.sort();
     }
 
-    trigger(trigger: string, state: Match, action?: ActionInputInterface): Match {
+    trigger(trigger: string, state: Match): Match {
         this.rules.forEach(rule => {
             if (rule.trigger.includes(trigger)) {
-                rule.apply(trigger, state, action);
+                rule.apply(trigger, state);
             }
         });
         return state;

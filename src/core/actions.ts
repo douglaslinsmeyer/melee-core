@@ -18,7 +18,12 @@ export interface ActionInterface {
     description: string;
     type: ActionType;
     params?: Record<string, string>;
-    apply(input: ActionInputInterface, state: Match): void;
+    apply(input: ActionInstanceInterface, state: Match): void;
+}
+
+export interface ActionInstanceInterface {
+    input: ActionInputInterface;
+    action: ActionInterface;
 }
 
 export class ActionSet {
@@ -35,10 +40,17 @@ export class ActionSet {
 
     find(name: string): ActionInterface {
         const action = this.actions.find(a => a.name === name.toLowerCase());
-        if (!action) {
-            throw new Error(`Action with name ${name} not found.`);
-        }
+        if (!action) throw new Error(`Action with name ${name} not found.`);
         return action;
+    }
+
+    apply(input: ActionInputInterface, match: Match): void {
+        const action = this.find(input.action);
+        const actionInstance: ActionInstanceInterface = {
+            input: input,
+            action: action,
+        };
+        action.apply(actionInstance, match);
     }
 
     toSanitizedJSON(): Record<string, any> {

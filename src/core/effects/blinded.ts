@@ -4,8 +4,8 @@ import { Match } from '../match';
 const effect: StatusEffectInterface = {
     name: "Blinded",
     description: "The target is blinded and cannot see.",
-    type: EffectType.Detrimental,
-    targetScope: TargetScope.All,
+    type: EffectType.DETRIMENTAL,
+    targetScope: TargetScope.ALL,
     tier: 0,
     apply: (effect: StatusEffectInstance, match: Match): void => {
         const self = match.getCombatant(effect.target);

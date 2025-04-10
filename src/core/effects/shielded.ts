@@ -6,8 +6,8 @@ import { logger } from '../logger';
 const effect: StatusEffectInterface = {
     name: 'Shielded',
     description: "The target gains a defensive shield, increasing their defense.",
-    type: EffectType.Defensive,
-    targetScope: TargetScope.Self,
+    type: EffectType.DEFENSIVE,
+    targetScope: TargetScope.SELF,
     tier: 0,
     apply: (effect: StatusEffectInstance, match: Match): void => {
         const defenseModifierValue = dice.roll('1d10').total;

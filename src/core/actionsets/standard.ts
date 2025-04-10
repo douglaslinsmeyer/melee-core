@@ -1,15 +1,11 @@
-import { ActionSet } from './../actions';
-import ActionJab from '../actions/jab';
-import ActionMoveToward from '../actions/move-toward';
-import ActionBlock from '../actions/block';
-import ActionWait from '../actions/wait';
+import * as actions from '../actions/index';
+import { ActionSet } from '../actions';
 
 export default function (): ActionSet {
     const actionSet = new ActionSet();
-    actionSet.addAction(ActionWait);
-    actionSet.addAction(ActionJab);
-    actionSet.addAction(ActionMoveToward);
-    actionSet.addAction(ActionBlock);
-
+    actionSet.addAction(new actions.MoveTowardAction());
+    actionSet.addAction(new actions.JabAction());
+    actionSet.addAction(new actions.BlockAction());
+    actionSet.addAction(new actions.WaitAction());
     return actionSet;
 }

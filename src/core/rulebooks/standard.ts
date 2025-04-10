@@ -1,18 +1,14 @@
 import { RuleBook } from '../rules';
-import MaxRounds from '../rules/max-rounds';
-import RollForInitiative from '../rules/roll-for-initiative';
-import MatchStatus from '../rules/match-status';
-import StartingStats from '../rules/starting-stats';
-import LastSurvivor from '../rules/last-survivor';
-import OffensiveActions from '../rules/offensive-actions'
+import * as Rule from '../rules/index';
 
 export default function (): RuleBook { 
     const rulebook = new RuleBook('core');
-    rulebook.addRule(MaxRounds(25));
-    rulebook.addRule(RollForInitiative);
-    rulebook.addRule(MatchStatus);
-    rulebook.addRule(StartingStats);
-    rulebook.addRule(LastSurvivor);
-    rulebook.addRule(OffensiveActions);
+    rulebook.addRule(new Rule.LastSurvivorRule());
+    rulebook.addRule(new Rule.MatchStatusRule());
+    rulebook.addRule(new Rule.MaxRoundsRule(25));
+    rulebook.addRule(new Rule.OffensiveActionsRule());
+    rulebook.addRule(new Rule.RollForInitiativeRule());
+    rulebook.addRule(new Rule.StartingStatsRule());
+    rulebook.addRule(new Rule.TickEffectsRule());
     return rulebook;
 }

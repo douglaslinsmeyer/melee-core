@@ -5,8 +5,8 @@ import { logger } from '../logger';
 const effect: StatusEffectInterface = {
     name: "Dazed",
     description: "The target is dazed and is sluggish and disoriented.",
-    type: EffectType.Detrimental,
-    targetScope: TargetScope.All,
+    type: EffectType.DETRIMENTAL,
+    targetScope: TargetScope.ALL,
     tier: 0,
     apply: (effect: StatusEffectInstance, match: Match): void => {
         const self = match.getCombatant(effect.target);

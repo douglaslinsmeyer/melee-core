@@ -1,22 +1,21 @@
-import effect from "./effects/dazed";
 import { logger } from "./logger";
 import { Match } from "./match";
 import { v4 as uuidv4 } from 'uuid';
 
 export enum EffectType {
-    Beneficial = 'Beneficial',
-    Neutral = 'Neutral',
-    Detrimental = 'Detrimental',
-    Offensive = 'Offensive',
-    Defensive = 'Defensive',
+    BENEFICIAL = 'Beneficial',
+    NEUTRAL = 'Neutral',
+    DETRIMENTAL = 'Detrimental',
+    OFFENSIVE = 'Offensive',
+    DEFENSIVE = 'Defensive',
 }
 
 export enum TargetScope {
-    Self = 'Self',
-    Other = 'Other',
-    Ally = 'Ally',
-    Enemy = 'Enemy',
-    All = 'All'
+    SELF = 'Self',
+    OTHER = 'Other',
+    ALLY = 'Ally',
+    ENEMY = 'Enemy',
+    ALL = 'All'
 }
 
 
@@ -59,6 +58,7 @@ export class StatusEffectInstance {
     source: string;
     target: string;
     remaining: number;
+    tickingStarted: boolean = false;
 
     constructor(effect: StatusEffectInterface, source: string, target: string, duration: number) {
         this.model = effect;
@@ -94,11 +94,14 @@ export class StatusEffectCollection {
         if (index === -1) return;
         this.effects.splice(index, 1);
         effect.model.reset(effect, match);
-        logger.combat(`[EFFECT] Effect: [${effect.model.name}] has been removed from target: [${effect.target}].`);
     }
 
     tick(match: Match): void {
         this.effects.forEach(effect => {
+            if (false === effect.tickingStarted) {
+                effect.tickingStarted = true;
+                return;
+            }
             effect.remaining--;
             if (effect.remaining <= 0) {
                 this.remove(effect, match);
@@ -121,17 +124,17 @@ export class StatusEffectCollection {
     }
 
     private isInvalidTargetForEffect(effect: StatusEffectInstance, match: Match): boolean {
-        if (effect.model.targetScope === TargetScope.Self && effect.target !== effect.source) {
+        if (effect.model.targetScope === TargetScope.SELF && effect.target !== effect.source) {
             logger.combat(`[EFFECT:INVALID] Effect: [${effect.model.name}] is a self-only effect and cannot be applied to: [${effect.target}] by [${effect.source}].`);
             return true;
         }
 
-        if (effect.model.targetScope === TargetScope.Other && effect.target === effect.source) {
+        if (effect.model.targetScope === TargetScope.OTHER && effect.target === effect.source) {
             logger.combat(`[EFFECT:INVALID] Effect: [${effect.model.name}] cannot be applied to self: [${effect.source}].`);
             return true;
         }
 
-        if (effect.model.targetScope === TargetScope.Enemy && effect.target === effect.source) {
+        if (effect.model.targetScope === TargetScope.ENEMY && effect.target === effect.source) {
             logger.combat(`[EFFECT:INVALID] Effect: [${effect.model.name}] cannot be applied to self: [${effect.source}].`);
             return true;
         }

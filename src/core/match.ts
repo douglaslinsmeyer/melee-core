@@ -1,6 +1,9 @@
+import { ActionInstanceInterface, ActionInterface, ActionSet } from "./actions";
 import { Combatant } from "./combatant";
+import { RuleBook } from "./rules";
+import { Event } from "./events";
 
-export enum State {
+export enum MatchState {
     PENDING = "match.PENDING",
     IN_PROGRESS = "match.in_progress",
     COMPLETE = "match.complete"
@@ -13,11 +16,14 @@ export enum State {
  * It contains information about the rounds, combatants, and current round.
  */
 export class Match {
-    rounds: number = 3;
+    rounds: number = 100;
     currentRound: number = 0;
     combatants: Combatant[] = [];
     winners: Combatant[] = [];
-    state: State = State.PENDING;
+    state: MatchState = MatchState.PENDING;
+    lastAction: ActionInstanceInterface | null = null;
+    ruleBook: RuleBook = new RuleBook();
+    actionSet: ActionSet = new ActionSet();
 
     constructor(rounds?: number, currentRound?: number, combatants?: Combatant[]) {
         if (rounds) this.rounds = rounds;
@@ -25,11 +31,13 @@ export class Match {
         if (combatants) this.combatants = combatants;
     }
 
-    addCombatant(combatant: Combatant): void {
-        if (this.currentRound > 0) {
-            throw new Error("Cannot add combatant after match has started");
+    addCombatant(combatant: Combatant): this {
+        if (this.state !== MatchState.PENDING) {
+            throw new Error("Cannot add combatant after match has started.");
         }
         this.combatants.push(combatant);
+        this.ruleBook.trigger(Event.COMBATANT_ADDED, this);
+        return this;
     }
 
     getCombatant(id: string): Combatant {
@@ -38,5 +46,15 @@ export class Match {
             throw new Error(`Combatant with id ${id} not found`);
         }
         return combatant;
+    }
+
+    addActionSet(actionSet: ActionSet): this {
+        this.actionSet.merge(actionSet);
+        return this;
+    }
+
+    addRuleBook(ruleBook: RuleBook): this {
+        this.ruleBook.merge(ruleBook);
+        return this;
     }
 }
