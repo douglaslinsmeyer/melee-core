@@ -13,11 +13,11 @@ const rule: RuleInterface = {
     visible: true,
     apply: (trigger: string, match: Match) => {
         const survivingCombatants = match.combatants.filter(c => c.health > 0);
-        if (survivingCombatants.length !== 1) return match;
+        const allSameFaction = survivingCombatants.every(c => c.faction === survivingCombatants[0].faction);
+        if (!allSameFaction) return match;
         match.winners = survivingCombatants;
         match.state = MatchState.COMPLETE;
-        logger.combat(`[MATCH:COMPLETE] The match has ended as there is only one survivor. Winner(s): [${match.winners[0].id}]`);
-        logger.info(`Match ended due to only one survivor remaining. Winner(s): ${match.winners[0].id}.`);
+        logger.combat(`[MATCH:COMPLETE] The match has ended as there is only one survivor.`);
         return match;
     }
 }

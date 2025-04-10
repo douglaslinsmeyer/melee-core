@@ -1,11 +1,14 @@
+import effect from "./effects/dazed";
 import { logger } from "./logger";
 import { Match } from "./match";
 import { v4 as uuidv4 } from 'uuid';
 
-export enum Type {
+export enum EffectType {
     Beneficial = 'Beneficial',
     Neutral = 'Neutral',
     Detrimental = 'Detrimental',
+    Offensive = 'Offensive',
+    Defensive = 'Defensive',
 }
 
 export enum TargetScope {
@@ -38,9 +41,11 @@ export interface StatusEffectInterface {
     description: string;
     domain?: string;
     tier: number;
-    type: Type;
+    type: EffectType;
     targetScope: TargetScope;
-    apply: (match: Match, source: string, target: string) => void;
+    apply: (effect: StatusEffectInstance, match: Match) => Match;
+    tick: (effect: StatusEffectInstance, match: Match) => Match;
+    reset: (effect: StatusEffectInstance, match: Match) => Match;
 }
 
 /**
@@ -48,7 +53,7 @@ export interface StatusEffectInterface {
  * 
  * This class represents an instance of a status effect applied to an actor.
  */
-class StatusEffectInstance {
+export class StatusEffectInstance {
     model: StatusEffectInterface;
     id: string;
     source: string;
@@ -77,29 +82,32 @@ export class StatusEffectCollection {
     
     effects: StatusEffectInstance[] = [];
 
-    add(effect: StatusEffectInstance): void {
-        if (this.isInvalidTargetForEffect(effect)) return;
-        if (this.alreadyHasBetter(effect)) return;
+    add(effect: StatusEffectInstance, match: Match): Match {
+        if (this.isInvalidTargetForEffect(effect)) return match;
+        if (this.alreadyHasBetter(effect)) return match;
         this.effects.push(effect);
-        logger.combat(`[EFFECT:ADD] Effect: [${effect.model.name}] applied to [${effect.target}] by [${effect.source}].`);
+        match = effect.model.apply(effect, match);
+        return match;
     }
 
-    remove(effect: StatusEffectInstance): void {
-        const index = this.effects.findIndex(e => e.model.name === effect.model.name);
-        if (index === -1) return;
+    remove(effect: StatusEffectInstance, match: Match): Match {
+        const index = this.effects.findIndex(e => e.id === effect.id);
+        if (index === -1) return match;
         this.effects.splice(index, 1);
+        match = effect.model.reset(effect, match);
+        return match;
     }
 
-    has(effect: StatusEffectInstance): boolean {
-        return this.effects.some(e => e.model.name === effect.model.name);
-    }
-
-    tick(match: Match): void {
+    tick(match: Match): Match {
         this.effects.forEach(effect => {
-            effect.model.apply(match, effect.source, effect.target);
             effect.remaining--;
-            if (effect.remaining <= 0) this.remove(effect);
+            if (effect.remaining <= 0) {
+                this.remove(effect, match);
+                return;
+            }
+            effect.model.tick(effect, match);
         });
+        return match;
     }
 
     private alreadyHasBetter(effect: StatusEffectInstance): boolean {

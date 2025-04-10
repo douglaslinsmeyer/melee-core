@@ -1,8 +1,5 @@
 import { Match } from './match';
-import MaxRounds from './rules/max-rounds';
-import RollForInitiative from './rules/roll-for-initiative';
-import MatchStatus from './rules/match-status';
-import StartingStats from './rules/starting-stats';
+import { ActionInputInterface, ActionInterface } from './actions';
 
 /**
  * Rule interface
@@ -17,7 +14,7 @@ export interface RuleInterface {
     category?: string;
     priority?: number;
     visible?: boolean;
-    apply: (trigger: string, match: Match) => Match;
+    apply: (trigger: string, match: Match, action?: ActionInputInterface) => Match;
 }
 
 export enum Category {
@@ -64,10 +61,10 @@ export class RuleBook {
         this.sort();
     }
 
-    trigger(trigger: string, state: Match): Match {
+    trigger(trigger: string, state: Match, action?: ActionInputInterface): Match {
         this.rules.forEach(rule => {
             if (rule.trigger.includes(trigger)) {
-                state = rule.apply(trigger, state);
+                state = rule.apply(trigger, state, action);
             }
         });
         return state;
@@ -97,9 +94,3 @@ export class RuleBook {
         return rulesDescriptions;
     }
 }
-
-export const standardRules = new RuleBook('core');
-standardRules.addRule(MaxRounds(10));
-standardRules.addRule(RollForInitiative);
-standardRules.addRule(MatchStatus);
-standardRules.addRule(StartingStats);

@@ -1,10 +1,11 @@
-import { ActionInterface, ActionInputInterface } from '../actions';
+import { ActionInterface, ActionInputInterface, ActionType } from '../actions';
 import { Match } from '../match';
 import { logger } from '../logger';
 
 const action: ActionInterface = {
     name: 'movements.move.toward',
     description: 'Move your combatant to a new position.',
+    type: ActionType.NEUTRAL,
     params: {
         exampleProperty: "string, some example property.",
     },

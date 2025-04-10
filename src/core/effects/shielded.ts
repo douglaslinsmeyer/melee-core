@@ -1,22 +1,21 @@
 import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '../effects';
 import { Match } from '../match';
-import { logger } from '../logger';
+
+const NAME = "Shielded: Defense";
 
 const effect: StatusEffectInterface = {
-    name: "Dazed",
-    description: "The target is dazed and is sluggish and disoriented.",
-    type: EffectType.Detrimental,
-    targetScope: TargetScope.All,
+    name: NAME,
+    description: "The target gains a defensive shield, increasing their defense.",
+    type: EffectType.Defensive,
+    targetScope: TargetScope.Self,
     tier: 0,
     apply: (effect: StatusEffectInstance, match: Match): Match => {
         const self = match.getCombatant(effect.target);
-        self.addEfficacyModifier({
+        self.addDefenseModifier({
             id: effect.id,
-            name: "Dazed",
-            value: -50,
+            name: NAME,
+            value: 3,
         });
-        logger.combat(`[EFFECT] Combatant: [${self.id}] is now dazed.`);
-
         return match;
     },
     tick: (effect: StatusEffectInstance, match: Match): Match => {
@@ -24,11 +23,10 @@ const effect: StatusEffectInterface = {
     },
     reset: (effect: StatusEffectInstance, match: Match): Match => {
         const self = match.getCombatant(effect.target);
-        self.removeEfficacyModifier(effect.id);
-        logger.combat(`[EFFECT] Combatant: [${self.id}] is no longer dazed.`);
-
+        self.removeDefenseModifier(effect.id);
         return match;
     },
+    
 }
 
 export default effect;

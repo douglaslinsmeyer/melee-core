@@ -13,25 +13,22 @@ const rule: RuleInterface = {
     category: 'win_conditions',
     trigger: [
         Event.ROUND_ENDED,
-        Event.COMBATANTS_ADDED,
+        Event.MATCH_STARTED,
     ],
     visible: true,
     apply: (trigger: string, match: Match) => {
         switch (trigger) {
-            case Event.COMBATANTS_ADDED:
-                if (match.rounds !== roundLimit) {
-                    match.rounds = roundLimit;
-                    logger.info(`Round limit set to ${roundLimit}.`);
-                    logger.combat(`[MATCH:ROUND_LIMIT] Round limit set to [${roundLimit}].`);
-                }
+            case Event.MATCH_STARTED:
+                match.rounds = roundLimit;
+                logger.info(`Round limit set to ${roundLimit}.`);
+                logger.combat(`[MATCH:ROUND_LIMIT] Round limit set to [${roundLimit}].`);
                 break
             case Event.ROUND_ENDED:
                 if (match.currentRound >= match.rounds) {
                     const maxHealth = Math.max(...match.combatants.map(c => c.health));
                     match.winners = match.combatants.filter(c => c.health === maxHealth);
                     match.state = MatchState.COMPLETE;
-                    logger.combat(`[MATCH:COMPLETE] The match has ended due to reaching round limit. Winner(s):[${match.winners.map(c => c.id).join(', ')}]`);
-                    logger.info(`Match ended due to reaching round limit. Winner(s): ${match.winners.map(c => c.id).join(', ')}.`);
+                    logger.combat(`[MATCH:COMPLETE] The match has ended due to reaching round limit.`);
                 }
                 break
         }

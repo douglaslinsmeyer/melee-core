@@ -48,23 +48,17 @@ export class Engine {
         this.ruleBook.trigger(Event.COMBATANTS_ADDED, match);
         this.ruleBook.trigger(Event.MATCH_STARTED, match);
         logger.combat(`[MATCH:STARTED]: The match started with [${match.combatants.length}] combatants.`);
-        logger.info(`Match started with ${match.combatants.length} combatants.`);
         return match;
     }
 
     advance(match: Match): Match {
         match.currentRound++;
-        this.ruleBook.trigger(Event.ROUND_STARTED, match);
         logger.combat(`[ROUND:${match.currentRound}:STARTED]: Round No. [${match.currentRound}] started.`);
-        logger.info(`Round ${match.currentRound} started.`);
-        
-        // Resolve combatant status effects
-        match.combatants.forEach(combatant => {
-            combatant.effects.tick(match);
-        });
-        
+        this.ruleBook.trigger(Event.ROUND_STARTED, match);
+
         // Resolve combatant actions
         match.combatants.forEach(combatant => {
+            if (combatant.health <= 0) return;
             const response = this.io.call(combatant.bot.uri, combatant, match, this.ruleBook, this.actions);
             const actionInput: ActionInputInterface = {
                 combatantId: combatant.id,
@@ -73,10 +67,13 @@ export class Engine {
                 params: response.params
             };
             match = this.actions.find(response.action).apply(actionInput, match);
-            this.ruleBook.trigger(Event.ACTION_PERFORMED, match);
-        });
 
+            match = combatant.effects.tick(match);
+            this.ruleBook.trigger(Event.ACTION_PERFORMED, match, actionInput);
+        });
+        
         this.ruleBook.trigger(Event.ROUND_ENDED, match);
+        logger.combat(`[ROUND:${match.currentRound}:ENDED]: Round No. [${match.currentRound}] ended.`);
         return match;
     }
 

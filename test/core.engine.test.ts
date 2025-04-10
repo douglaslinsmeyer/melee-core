@@ -1,16 +1,16 @@
 import { Bot } from '../src/core/bot';
 import { Combatant } from '../src/core/combatant';
-import { Location } from '../src/core/movement';
 import { Engine } from '../src/core/engine';
 import { IOHandler } from '../src/core/io';
 import { IODriverInternal } from '../src/core/io/internal';
-import { standardActions } from '../src/core/actions';
-import { standardRules } from '../src/core/rules';
+import standardRules from '../src/core/rulebooks/standard';
+import standardActions from '../src/core/actionsets/standard';
+
 
 const ioHandler = new IOHandler(new IODriverInternal());
 const engine = new Engine(ioHandler);
-engine.ruleBook.merge(standardRules);
-engine.actions.merge(standardActions);
+engine.ruleBook.merge(standardRules());
+engine.actions.merge(standardActions());
 
 describe('Game engine tests:', () => {
     test('Test game engine start', () => {

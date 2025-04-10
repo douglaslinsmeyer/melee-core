@@ -1,7 +1,4 @@
 import { Match } from './match';
-import ActionWait from './actions/wait';
-import ActionJab from './actions/jab';
-import ActionMoveToward from './actions/move-toward';
 
 export interface ActionInputInterface {
     combatantId: string;
@@ -10,9 +7,16 @@ export interface ActionInputInterface {
     params?: any;
 }
 
+export enum ActionType {
+    OFFENSIVE = 'offensive',
+    DEFENSIVE = 'defensive',
+    NEUTRAL = 'neutral',
+}
+
 export interface ActionInterface {
     name: string;
     description: string;
+    type: ActionType;
     params?: Record<string, string>;
     apply: (input: ActionInputInterface, state: Match) => Match;
 }
@@ -59,8 +63,3 @@ export class ActionSet {
         this.actions = [...this.actions, ...other.actions];
     }
 }
-
-export const standardActions = new ActionSet();
-standardActions.addAction(ActionWait);
-standardActions.addAction(ActionJab);
-standardActions.addAction(ActionMoveToward);

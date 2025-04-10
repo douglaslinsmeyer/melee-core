@@ -3,6 +3,12 @@ import { Affectable, StatusEffectCollection } from "./effects";
 import { Bot, BotInterface } from "./bot";
 import { v4 as uuidv4 } from 'uuid';
 
+interface StatModifierInterface {
+    id: string;
+    name: string;
+    value: number;
+}
+
 /**
  * Combatant class
  * 
@@ -18,23 +24,24 @@ export class Combatant implements Locatable, Moveable, Affectable {
     className: string;
 
     health: number = 0;
+
     _maxHealth: number = 0;
-    _healthModifiers: {[key: string]: number} = {};
+    _healthModifiers: StatModifierInterface[] = [];
 
     _initiative: number = 0;
-    _initiativeModifiers: {[key: string]: number} = {};
+    _initiativeModifiers: StatModifierInterface[] = [];
     
     _defense: number = 0;
-    _defenseModifiers: {[key: string]: number} = {};
+    _defenseModifiers: StatModifierInterface[] = [];
     
     _attack: number = 0;
-    _attackModifiers: {[key: string]: number} = {};
+    _attackModifiers: StatModifierInterface[] = [];
 
     _movementSpeed: number = 0;
-    _movementSpeedModifiers: {[key: string]: number} = {};
+    _movementSpeedModifiers: StatModifierInterface[] = [];
 
     _efficacy: number = 100;
-    _efficacyModifiers: {[key: string]: number} = {};
+    _efficacyModifiers: StatModifierInterface[] = [];
     
     location: LocationInterface;
     effects: StatusEffectCollection;
@@ -56,12 +63,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this._maxHealth = value;
     }
 
-    public addMaxHealthModifier(name: string, value: number): void {
-        this._healthModifiers[name] = value;
+    public addMaxHealthModifier(modifier: StatModifierInterface): void {
+        this._healthModifiers.push(modifier);
     }
 
-    public removeMaxHealthModifier(name: string): void {
-        delete this._healthModifiers[name];
+    public removeMaxHealthModifier(id: string): void {
+        const index = this._healthModifiers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            this._healthModifiers.splice(index, 1);
+        }
     }
 
     public get attack(): number {
@@ -72,12 +82,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this._attack = value;
     }
 
-    public addAttackModifier(name: string, value: number): void {
-        this._attackModifiers[name] = value;
+    public addAttackModifier(modifer: StatModifierInterface): void {
+        this._attackModifiers.push(modifer);
     }
 
-    public removeAttackModifier(name: string): void {
-        delete this._attackModifiers[name];
+    public removeAttackModifier(id: string): void {
+        const index = this._attackModifiers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            this._attackModifiers.splice(index, 1);
+        }
     }
     
     public get defense(): number {
@@ -87,12 +100,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
     public set defense(value: number) {
         this._defense = value;
     }
-    public addDefenseModifier(name: string, value: number): void {
-        this._defenseModifiers[name] = value;
+    public addDefenseModifier(modifier: StatModifierInterface): void {
+        this._defenseModifiers.push(modifier);
     }
 
-    public removeDefenseModifier(name: string): void {
-        delete this._defenseModifiers[name];
+    public removeDefenseModifier(id: string): void {
+        const index = this._defenseModifiers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            this._defenseModifiers.splice(index, 1);
+        }
     }
 
     public get initiative(): number {
@@ -103,12 +119,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this._initiative = value;
     }
 
-    public addInitiativeModifier(name: string, value: number): void {
-        this._initiativeModifiers[name] = value;
+    public addInitiativeModifier(modifier: StatModifierInterface): void {
+        this._initiativeModifiers.push(modifier);
     }
 
-    public removeInitiativeModifier(name: string): void {
-        delete this._initiativeModifiers[name];
+    public removeInitiativeModifier(id: string): void {
+        const index = this._initiativeModifiers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            this._initiativeModifiers.splice(index, 1);
+        }
     }
 
     public get efficacy(): number {
@@ -123,12 +142,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
         return this.efficacy / 100;
     }
 
-    public addEfficacyModifier(name: string, value: number): void {
-        this._efficacyModifiers[name] = value;
+    public addEfficacyModifier(modifier: StatModifierInterface): void {
+        this._efficacyModifiers.push(modifier);
     }
 
-    public removeEfficacyModifier(name: string): void {
-        delete this._efficacyModifiers[name];
+    public removeEfficacyModifier(id: string): void {
+        const index = this._efficacyModifiers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            this._efficacyModifiers.splice(index, 1);
+        }
     }
 
     public get movementSpeed(): number {
@@ -139,12 +161,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this._movementSpeed = value;
     }
 
-    public addMovementSpeedModifier(name: string, value: number): void {
-        this._movementSpeedModifiers[name] = value;
+    public addMovementSpeedModifier(modifier: StatModifierInterface): void {
+        this._movementSpeedModifiers.push(modifier);
     }
 
-    public removeMovementSpeedModifier(name: string): void {
-        delete this._movementSpeedModifiers[name];
+    public removeMovementSpeedModifier(id: string): void {
+        const index = this._movementSpeedModifiers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            this._movementSpeedModifiers.splice(index, 1);
+        }
     }
 
     damage(amount: number): void {
@@ -164,7 +189,7 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this.location = this.location.moveToward(target.location, distance);
     }
 
-    private calculateModifierSum(modifiers: {[key: string]: number}): number {
-        return Object.values(modifiers).reduce((sum, value) => sum + value, 0);
+    private calculateModifierSum(statModifiers: StatModifierInterface[]): number {
+        return statModifiers.reduce((sum: number, modifier: StatModifierInterface) => sum + modifier.value, 0);
     }
 }
