@@ -12,8 +12,8 @@ export class StartingStatsRule implements RuleInterface {
     priority: number = 1;
     apply(trigger: string, match: Match): void {
         match.combatants.forEach(combatant => {
-            combatant.health = 100;
             combatant.maxHealth = 100;
+            combatant.health = 100;
             combatant.initiative = 0;
             combatant.attack = 0;
             combatant.defense = 0;

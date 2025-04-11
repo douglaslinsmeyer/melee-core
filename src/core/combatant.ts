@@ -3,19 +3,35 @@ import { Affectable, StatusEffectCollection } from "./effects";
 import { BotInterface } from "./bot";
 import { v4 as uuidv4 } from 'uuid';
 
+/**
+ * StatModifierInterface
+ * 
+ * This interface defines the structure of a stat modifier
+ * that can be applied to a combatant's stats.
+ * 
+ * Stat modifiers are used to modify the combatant's stats
+ * such as health, attack, defense, initiative, movement speed, and efficacy.
+ * The combatant's stat modifier is equal to the sum of all the status modifiers
+ * applied to it.
+ */
 interface StatModifierInterface {
     id: string;
     name: string;
     value: number;
 }
 
+interface Damageable {
+    damage(amount: number): void;
+    heal(amount: number): void;
+    isAlive(): boolean;
+}
+
 /**
  * Combatant class
  * 
  * This class represents a combatant in the game.
- * It implements the Locatable, Moveable, and Affectable interfaces.
  */
-export class Combatant implements Locatable, Moveable, Affectable {
+export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     
     public bot: BotInterface;
     public id: string;
@@ -56,6 +72,11 @@ export class Combatant implements Locatable, Moveable, Affectable {
         return this._health;
     }
 
+    public set health(value: number) {
+        if (value + this.health > this.maxHealth) value = this.maxHealth;
+        this._health = value;
+    }
+
     public get maxHealth(): number {
         return this._maxHealth + this.calculateModifierSum(this._healthModifiers);
     }
@@ -69,9 +90,12 @@ export class Combatant implements Locatable, Moveable, Affectable {
     }
 
     public removeMaxHealthModifier(id: string): void {
-        const index = this._healthModifiers.findIndex(m => m.id === id);
-        if (index !== -1) {
-            this._healthModifiers.splice(index, 1);
+        const modifier = this._healthModifiers.find(m => m.id === id);
+        if (!modifier) return;
+        this._healthModifiers.splice(this._healthModifiers.indexOf(modifier), 1);
+        // If the modifier was positive, then check to ensure the current health is not greater than max health
+        if (modifier.value > 0 && this.health > this.maxHealth) {
+            this.health = this.maxHealth;
         }
     }
 
@@ -174,15 +198,15 @@ export class Combatant implements Locatable, Moveable, Affectable {
     }
 
     public damage(amount: number): void {
-        this._health = Math.max(0, this.health - amount);
+        this.health = Math.max(0, this.health - amount);
     }
 
     public heal(amount: number): void {
-        this._health = Math.min(this.maxHealth, this.health + amount);
+        this.health = Math.min(this.maxHealth, this.health + amount);
     }
 
     public isAlive(): boolean {
-        return this._health > 0;
+        return this.health > 0;
     }
 
     public moveToward(target: Locatable, distance: number) {
