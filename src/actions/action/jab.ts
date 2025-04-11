@@ -9,6 +9,7 @@ export class JabAction implements ActionInterface {
     name: string = 'offense.jabs';
     description: string = 'A series of quick jab attack.';
     type: ActionType = ActionType.OFFENSIVE;
+    range: number = 1;
     params?: Record<string, string>;
     apply(instance: ActionInstanceInterface, match: Match): string {
         const self = match.combatants.find(c => c.id === instance.input.combatantId);
