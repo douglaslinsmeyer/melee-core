@@ -14,7 +14,7 @@ export class OffensiveActionsRule implements RuleInterface {
     apply(trigger: string, match: Match): void {
         const combatant = match.combatants.find(c => c.id === match.lastAction?.input.combatantId);
         // check if the combatant has any defensive effects active
-        const defensiveEffects = combatant?.effects.effects.filter(e => e.model.type === EffectType.DEFENSIVE);
+        const defensiveEffects = combatant?.effects.all.filter(e => e.model.type === EffectType.DEFENSIVE);
         if (defensiveEffects && defensiveEffects.length > 0) {
             defensiveEffects.forEach(effect => {
                 combatant?.effects.remove(effect, match);

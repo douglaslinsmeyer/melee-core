@@ -1,6 +1,6 @@
 import { Locatable, Location, LocationInterface, Moveable } from "./movement";
 import { Affectable, StatusEffectCollection } from "./effects";
-import { Bot, BotInterface } from "./bot";
+import { BotInterface } from "./bot";
 import { v4 as uuidv4 } from 'uuid';
 
 interface StatModifierInterface {
@@ -17,34 +17,31 @@ interface StatModifierInterface {
  */
 export class Combatant implements Locatable, Moveable, Affectable {
     
-    bot: BotInterface;
+    public bot: BotInterface;
+    public id: string;
+    public faction: string;
+    public className: string;
+    public location: LocationInterface;
+    public effects: StatusEffectCollection;
+
+    private _health: number = 0;
+    private _maxHealth: number = 0;
+    private _healthModifiers: StatModifierInterface[] = [];
+
+    private _initiative: number = 0;
+    private _initiativeModifiers: StatModifierInterface[] = [];
     
-    id: string;
-    faction: string;
-    className: string;
-
-    health: number = 0;
-
-    _maxHealth: number = 0;
-    _healthModifiers: StatModifierInterface[] = [];
-
-    _initiative: number = 0;
-    _initiativeModifiers: StatModifierInterface[] = [];
+    private _defense: number = 0;
+    private _defenseModifiers: StatModifierInterface[] = [];
     
-    _defense: number = 0;
-    _defenseModifiers: StatModifierInterface[] = [];
-    
-    _attack: number = 0;
-    _attackModifiers: StatModifierInterface[] = [];
+    private _attack: number = 0;
+    private _attackModifiers: StatModifierInterface[] = [];
 
-    _movementSpeed: number = 0;
-    _movementSpeedModifiers: StatModifierInterface[] = [];
+    private _movementSpeed: number = 0;
+    private _movementSpeedModifiers: StatModifierInterface[] = [];
 
-    _efficacy: number = 100;
-    _efficacyModifiers: StatModifierInterface[] = [];
-    
-    location: LocationInterface;
-    effects: StatusEffectCollection;
+    private _efficacy: number = 100;
+    private _efficacyModifiers: StatModifierInterface[] = [];
 
     constructor(bot: BotInterface, location: LocationInterface = new Location(0,0,0), className: string = 'default', faction: string = uuidv4()) {
         this.bot = bot;
@@ -53,6 +50,10 @@ export class Combatant implements Locatable, Moveable, Affectable {
         this.className = className;
         this.location = location;
         this.effects = new StatusEffectCollection();
+    }
+
+    public get health(): number {
+        return this._health;
     }
 
     public get maxHealth(): number {
@@ -172,19 +173,19 @@ export class Combatant implements Locatable, Moveable, Affectable {
         }
     }
 
-    damage(amount: number): void {
-        this.health = Math.max(0, this.health - amount);
+    public damage(amount: number): void {
+        this._health = Math.max(0, this.health - amount);
     }
 
-    heal(amount: number): void {
-        this.health = Math.min(this.maxHealth, this.health + amount);
+    public heal(amount: number): void {
+        this._health = Math.min(this.maxHealth, this.health + amount);
     }
 
-    isAlive(): boolean {
-        return this.health > 0;
+    public isAlive(): boolean {
+        return this._health > 0;
     }
 
-    moveToward(target: Locatable, distance: number) {
+    public moveToward(target: Locatable, distance: number) {
         distance = (distance > this.movementSpeed) ? this.movementSpeed : distance;
         this.location = this.location.moveToward(target.location, distance);
     }

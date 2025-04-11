@@ -80,24 +80,32 @@ export function StatusEffect(effect: StatusEffectInterface, source: string, targ
  */
 export class StatusEffectCollection {
     
-    effects: StatusEffectInstance[] = [];
+    private _effects: StatusEffectInstance[] = [];
 
     add(effect: StatusEffectInstance, match: Match): void {
         if (this.isInvalidTargetForEffect(effect, match)) return;
         if (this.alreadyHasBetter(effect, match)) return;
-        this.effects.push(effect);
+        this._effects.push(effect);
         effect.model.apply(effect, match);
     }
 
+    get all(): StatusEffectInstance[] {
+        return this._effects;
+    }
+
+    has(name: string): boolean {
+        return this._effects.some(e => e.model.name === name);
+    }
+
     remove(effect: StatusEffectInstance, match: Match): void {
-        const index = this.effects.findIndex(e => e.id === effect.id);
+        const index = this._effects.findIndex(e => e.id === effect.id);
         if (index === -1) return;
-        this.effects.splice(index, 1);
+        this._effects.splice(index, 1);
         effect.model.reset(effect, match);
     }
 
     tick(match: Match): void {
-        this.effects.forEach(effect => {
+        this._effects.forEach(effect => {
             if (false === effect.tickingStarted) {
                 effect.tickingStarted = true;
                 return;
@@ -113,7 +121,7 @@ export class StatusEffectCollection {
 
     private alreadyHasBetter(effect: StatusEffectInstance, match: Match): boolean {
         if (!effect.model.domain) return false;
-        const existingEffect = this.effects.find(e => e.model.domain === effect.model.domain);
+        const existingEffect = this._effects.find(e => e.model.domain === effect.model.domain);
         if (!existingEffect) return false;
         if (existingEffect.model.tier > effect.model.tier) return true;
         if (existingEffect.remaining > effect.remaining) return true;
