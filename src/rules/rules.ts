@@ -41,11 +41,13 @@ export class RuleBook {
         if (name) this.name = name;
     }
 
-    private sort(): void {
+    private sort(): this {
         this.rules.sort((a, b) => (a.priority ?? RULEBOOK_DEFAULT_PRIORITY) - (b.priority ?? RULEBOOK_DEFAULT_PRIORITY));
+
+        return this;
     }
 
-    addRule(rule: RuleInterface): void {
+    addRule(rule: RuleInterface): this {
         rule.name = rule.name.toLowerCase();
         if (this.rules.some(r => r.name === rule.name)) {
             throw new Error(`Rule with name ${rule.name} already exists.`);
@@ -59,6 +61,8 @@ export class RuleBook {
 
         this.rules.push(rule);
         this.sort();
+
+        return this;
     }
 
     trigger(trigger: string, state: Match, context?: any): Match {
