@@ -85,13 +85,12 @@ export class StatusEffectCollection {
     private _effects: StatusEffectInstance[] = [];
 
     add(effect: StatusEffectInstance, match: Match): void {
+        if (!effect.model.isApplicable(effect, match)) return;
         if (this.isInvalidTargetForEffect(effect, match)) return;
         if (this.alreadyHasBetter(effect, match)) return;
-        if (effect.model.isApplicable(effect, match)) {
-            this.removeByName(effect.model.name, match);
-            this._effects.push(effect);
-            effect.model.onApplication(effect, match);
-        }
+        this.removeByName(effect.model.name, match);
+        this._effects.push(effect);
+        effect.model.onApplication(effect, match);
     }
 
     get all(): StatusEffectInstance[] {
