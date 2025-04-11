@@ -6,6 +6,7 @@ import internalDriver from '../src/io/drivers/internal/internal';
 import standardRules from '../src/rulebooks/standard';
 import standardActions from '../src/actions/actionsets/standard';
 import { Match } from '../src/match';
+import { Location } from './../src/movements/movement';
 
 const io = new IO();
 const engine = new Engine(io);
@@ -16,8 +17,14 @@ const match = new Match()
 describe('Game engine tests:', () => {
     test('Test game engine start', () => {
         match
-            .addCombatant(new Combatant(new Bot('Alpha-1', 'A test bot', 'internal://alpha', 'alpha-1-secret', internalDriver)))
-            .addCombatant(new Combatant(new Bot('Alpha-2', 'A test bot', 'internal://alpha', 'alpha-2-secret', internalDriver)));
+            .addCombatant(new Combatant(
+                new Bot('Alpha-1', 'A test bot', 'internal://alpha', 'alpha-1-secret', internalDriver), 
+                new Location())
+            )
+            .addCombatant(new Combatant(
+                new Bot('Alpha-2', 'A test bot', 'internal://alpha', 'alpha-2-secret', internalDriver),
+                new Location())
+            );
         
         engine.run(match);
     });

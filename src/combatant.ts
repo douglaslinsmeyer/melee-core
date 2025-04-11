@@ -1,4 +1,4 @@
-import { Locatable, Location, LocationInterface, Moveable } from "./movement";
+import { Locatable, Location, LocationInterface, Moveable } from "./movements/movement";
 import { Affectable, StatusEffectCollection } from "./effects";
 import { BotInterface } from "./bot";
 import { v4 as uuidv4 } from 'uuid';
@@ -59,12 +59,12 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     private _efficacy: number = 100;
     private _efficacyModifiers: StatModifierInterface[] = [];
 
-    constructor(bot: BotInterface, location: LocationInterface = new Location(0,0,0), className: string = 'default', faction: string = uuidv4()) {
+    constructor(bot: BotInterface, location?: LocationInterface, className?: string, faction?: string ) {
         this.bot = bot;
         this.id = uuidv4();
-        this.faction = faction;
-        this.className = className;
-        this.location = location;
+        this.faction = faction || uuidv4();
+        this.className = className || 'default';
+        this.location = location || new Location();
         this.effects = new StatusEffectCollection();
     }
 
