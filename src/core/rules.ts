@@ -80,18 +80,4 @@ export class RuleBook {
         });
         this.sort();
     }
-
-    toSanitizedJSON(): { [key: string]: string[] }  {
-        const rulesDescriptions: { [key: string]: string[] } = {};
-        this.rules.forEach(rule => {
-            if (!rule.visible) return;
-            const category = rule.category || "default";
-            if (!rulesDescriptions[category]) {
-                rulesDescriptions[category] = [];
-            }
-            rulesDescriptions[category].push(rule.description);
-        });
-        
-        return rulesDescriptions;
-    }
 }

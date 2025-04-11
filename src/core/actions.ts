@@ -28,7 +28,15 @@ export interface ActionInstanceInterface {
 
 export class ActionSet {
 
-    actions: ActionInterface[] = [];
+    private _actions: ActionInterface[] = [];
+
+    get actions(): ActionInterface[] {
+        return this._actions;
+    }
+
+    set actions(actions: ActionInterface[]) {
+        this._actions = actions;
+    }
 
     addAction(action: ActionInterface): void {
         action.name = action.name.toLowerCase();
@@ -40,7 +48,7 @@ export class ActionSet {
 
     find(name: string): ActionInterface {
         const action = this.actions.find(a => a.name === name.toLowerCase());
-        if (!action) throw new Error(`Action with name ${name} not found.`);
+        if (!action) throw new Error(`Action with name "${name}" not found.`);
         return action;
     }
 
@@ -51,24 +59,6 @@ export class ActionSet {
             action: action,
         };
         action.apply(actionInstance, match);
-    }
-
-    toSanitizedJSON(): Record<string, any> {
-        const actionsDescriptions: Record<string, any>[] = [];
-        this.actions.forEach(action => {
-            actionsDescriptions.push({
-                name: action.name,
-                description: action.description,
-                response: {
-                    combatantId: "string, combatant ID.",
-                    targetId: "string, target ID.",
-                    action: "string, action name.",
-                    params: action.params,
-                }
-            });
-        });
-        actionsDescriptions.sort((a, b) => a.name.localeCompare(b.name));
-        return actionsDescriptions;
     }
     
     merge(other: ActionSet): void {
