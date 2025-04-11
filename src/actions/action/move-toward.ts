@@ -1,6 +1,5 @@
 import { ActionInterface, ActionInputInterface, ActionType, ActionInstanceInterface } from '../actions';
 import { Match } from '../../match';
-import { logger } from '../../logger';
 
 export class MoveTowardAction implements ActionInterface {
     name: string = 'movements.move.toward';
@@ -11,7 +10,6 @@ export class MoveTowardAction implements ActionInterface {
         const self = match.combatants.find(c => c.id === instance.input.combatantId);
         const target = match.combatants.find(c => c.id === instance.input.targetId);
         if (!self || !target) {
-            logger.error('Invalid input: combatant or target not found.');
             throw new Error('Invalid input: combatant or target not found.');
         }
         

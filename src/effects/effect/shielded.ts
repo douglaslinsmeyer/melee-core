@@ -1,7 +1,6 @@
 import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '../effects';
-import { Match } from '../match';
-import { dice } from '../dice';
-import { logger } from '../logger';
+import { Match } from '../../match';
+import { dice } from '../../dice';
 
 const effect: StatusEffectInterface = {
     name: 'Shielded',

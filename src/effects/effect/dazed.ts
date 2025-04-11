@@ -1,6 +1,5 @@
 import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '../effects';
-import { Match } from '../match';
-import { logger } from '../logger';
+import { Match } from '../../match';
 
 const effect: StatusEffectInterface = {
     name: "Dazed",

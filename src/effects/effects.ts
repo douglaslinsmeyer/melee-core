@@ -1,7 +1,7 @@
-import { logger } from "./logger";
-import { Match } from "./match";
+import { logger } from "../logger";
+import { Match } from "../match";
 import { v4 as uuidv4 } from 'uuid';
-import { Event } from "./events";
+import { Event } from "../events";
 
 export enum EffectType {
     BENEFICIAL = 'Beneficial',

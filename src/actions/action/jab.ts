@@ -1,9 +1,8 @@
 import { ActionInterface, ActionType, ActionInstanceInterface } from '../actions';
 import { Match } from '../../match';
-import { logger } from '../../logger';
 import { dice } from '../../dice';
-import Dazed from '../../effects/dazed';
-import { StatusEffect } from '../../effects';
+import Dazed from '../../effects/effect/dazed';
+import { StatusEffect } from '../../effects/effects';
 
 export class JabAction implements ActionInterface {
     name: string = 'offense.jabs';
@@ -15,7 +14,6 @@ export class JabAction implements ActionInterface {
         const self = match.combatants.find(c => c.id === instance.input.combatantId);
         const target = match.combatants.find(c => c.id === instance.input.targetId);
         if (!self || !target) {
-            logger.error('Invalid input: combatant or target not found.');
             throw new Error('Invalid input: combatant or target not found.');
         }
         const originalDamage = dice.roll('3d4').total;
