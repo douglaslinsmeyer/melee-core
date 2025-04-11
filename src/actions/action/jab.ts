@@ -19,7 +19,7 @@ export class JabAction implements ActionInterface {
         }
         const originalDamage = dice.roll('3d4').total;
         const effectiveDamage = Math.round(originalDamage * self.efficacyPercentage);
-        const totalDamage = effectiveDamage - target.defense;
+        const totalDamage = Math.max(effectiveDamage - target.defense, 0);
         target.damage(totalDamage);
         if (dice.roll('1d20>15')) {
             target.effects.add(StatusEffect(Dazed, self.id, target.id, 1), match);

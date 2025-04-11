@@ -60,6 +60,7 @@ export class ActionSet {
             action: action,
         };
         const actionMessage = action.apply(actionInstance, match);
+        match.lastAction = actionInstance;
         logger.combat(`[ACTION:${action.name.toUpperCase()}] ${actionMessage}`);
     }
     

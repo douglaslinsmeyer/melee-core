@@ -147,9 +147,8 @@ export class StatusEffectCollection {
         if (!existingEffect) return false;
         if (existingEffect.model.tier > effect.model.tier) return true;
         if (existingEffect.remaining > effect.remaining) return true;
-
         this.remove(existingEffect, match);
-
+        
         return false;
     }
 

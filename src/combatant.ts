@@ -198,11 +198,11 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
 
     public damage(amount: number): void {
-        this.health = Math.max(0, this.health - amount);
+        this._health = Math.max(0, this.health - amount);
     }
 
     public heal(amount: number): void {
-        this.health = Math.min(this.maxHealth, this.health + amount);
+        this._health = Math.min(this.maxHealth, this.health + amount);
     }
 
     public isAlive(): boolean {

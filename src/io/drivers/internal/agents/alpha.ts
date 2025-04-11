@@ -21,7 +21,7 @@ const bot = {
         }
 
         const number = dice.roll('1d20').total;
-        const action = (number > 10) ? 'offense.jabs' : 'defense.block';
+        const action = (number > 5) ? 'offense.jabs' : 'defense.block';
         
         return {
             id: this.name, 
