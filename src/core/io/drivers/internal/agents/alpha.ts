@@ -1,15 +1,12 @@
-import { IORequest, IOResponse } from "../io";
-import { logger } from "../logger";
-import { dice } from '../dice';
+import { IORequest, IOResponse } from "../../../io";
+import { logger } from "../../../../logger";
+import { dice } from '../../../../dice';
 
-export class AlphaBot {
-    name: string;
-    key: string;
-
-    constructor() {
-        this.name = 'alpha';
-        this.key = 'alpha-secret-key';
-    }
+const bot = {
+    name: 'alpha',
+    description: 'Alpha bot that randomly chooses to attack or defend.',
+    uri: 'internal://alpha',
+    key: 'alpha-secret-key',
 
     respond(input: IORequest): IOResponse {
         const enemies = input.match.combatants.filter(combatant => combatant.id !== input.self.id);
@@ -34,3 +31,5 @@ export class AlphaBot {
         };
     }
 }
+
+export default bot;

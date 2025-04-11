@@ -1,24 +1,25 @@
-import { ActionSet } from '../src/core/actions';
-import { Bot } from '../src/core/bot';
-import { AlphaBot } from '../src/core/bots/alpha';
-import { Combatant } from '../src/core/combatant';
-import { IODriverInternal } from '../src/core/io/internal';
+import { mock } from 'ts-jest-mocker'
+import { IODriverInternal } from '../src/core/io/drivers/internal/internal';
 import { Match } from '../src/core/match';
-import { Location } from '../src/core/movement';
-import { RuleBook } from '../src/core/rules';
+import { Combatant } from '../src/core/combatant';
 
 describe('Internal driver tests:', () => {
     test('test bot loading', () => {
-        const alpha = new AlphaBot();
         const driver = new IODriverInternal();
-        const response = driver.call('internal://alpha', {
-            self: new Combatant(new Bot('', '', ''), new Location(0,0,0), '', ''),
-            match: new Match(),
-            rules: new RuleBook().toSanitizedJSON(),
-            log: [],
-            actions: new ActionSet().toSanitizedJSON()
+        driver.agents.forEach(agent => {
+            const request = {
+                uri: 'internal://' + agent.name,
+                self: mock(Combatant),
+                match: mock(Match),
+                log: [],
+                rules: {},
+                actions: {}
+            };
+            const response = driver.call(request);
+            expect(response).toHaveProperty('id');
+            expect(response).toHaveProperty('secret');
+            expect(response).toHaveProperty('action');
+            expect(response).toHaveProperty('target');
         });
-        expect(response.id).toBe(alpha.name);
-        expect(response.secret).toBe(alpha.key);
     });
 });

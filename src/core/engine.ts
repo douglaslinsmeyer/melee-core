@@ -1,4 +1,4 @@
-import { IOHandler } from "./io";
+import { IO } from "./io/io";
 import { Match, MatchState } from "./match";
 import { Event } from "./events";
 import { logger, combatLoggerArray } from "./logger";
@@ -9,10 +9,10 @@ const infiniteLoopMaxRoundsMessage = `Infinite loop detected. The match has been
 
 export class Engine {
 
-    io: IOHandler;
+    private _io: IO
 
-    constructor(ioHandler: IOHandler) {
-        this.io = ioHandler;
+    constructor(io: IO) {
+        this._io = io;
         logger.debug("Engine initialized.");
     }
 
@@ -40,7 +40,7 @@ export class Engine {
         match.ruleBook.trigger(Event.ROUND_STARTED, match);
         match.combatants.forEach(combatant => {
             if (combatant.health <= 0) return;
-            const response = this.io.call(combatant.bot.uri, combatant, match);
+            const response = this._io.call(combatant, match);
             const actionInput: ActionInputInterface = {
                 combatantId: combatant.id,
                 targetId: response.target,
@@ -60,7 +60,7 @@ export class Engine {
         match.ruleBook.trigger(Event.MATCH_ENDED, match);
         logger.combat(`[MATCH:ENDED]: The match ended. The winner(s) are: [${match.winners.map(w => w.id).join(", ")}]`);
         for (const combatant of match.combatants) {
-            this.io.call(combatant.bot.uri, combatant, match);
+            this._io.call(combatant, match);
             logger.info(`Combatant ${combatant.id} received end of match notification.`);
         }
     }

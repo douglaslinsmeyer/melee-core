@@ -1,12 +1,11 @@
-import { ActionSet } from "./actions";
-import { Combatant } from "./combatant";
-import { combatLoggerArray } from "./logger";
-import { Match } from "./match";
-import { RuleBook } from "./rules";
+import { ActionSet } from "../actions";
+import { Combatant } from "../combatant";
+import { combatLoggerArray } from "../logger";
+import { Match } from "../match";
+import { RuleBook } from "../rules";
 
 export interface IODriverInterface {
-    name: string;
-    call(uri: string, request: IORequest): IOResponse;
+    call(request: IORequest): IOResponse;
 }
 
 export interface IOResponse {
@@ -18,6 +17,7 @@ export interface IOResponse {
 }
 
 export interface IORequest {
+    uri: string
     self: Combatant;
     match: Match;
     log: any[];
@@ -25,16 +25,10 @@ export interface IORequest {
     actions: Record<string, any>;
 }
 
-export class IOHandler {
-
-    driver: IODriverInterface;
-
-    constructor(driver: IODriverInterface) {
-        this.driver = driver;
-    }
-
-    call(uri: string,combatant: Combatant, match: Match): IOResponse {
-        return this.driver.call(uri, {
+export class IO {
+    public call(combatant: Combatant, match: Match): IOResponse {
+        return combatant.bot.driver.call({
+            uri: combatant.bot.uri,
             self: combatant,
             match: match,
             log: combatLoggerArray.map(log => {
