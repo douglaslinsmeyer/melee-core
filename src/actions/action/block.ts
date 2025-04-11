@@ -9,13 +9,13 @@ export class BlockAction implements ActionInterface {
     description: string = "A defensive maneuver to block an attack.";
     type: ActionType = ActionType.DEFENSIVE;
     params?: Record<string, string>;
-    apply(instance: ActionInstanceInterface, match: Match): void {
+    apply(instance: ActionInstanceInterface, match: Match): string {
         const self = match.combatants.find(c => c.id === instance.input.combatantId);
         if (!self) {
             logger.error('Invalid input: combatant not found.');
             throw new Error('Invalid input: combatant not found.');
         }
         self.effects.add(StatusEffect(Shielded, self.id, self.id, 999), match);
-        logger.combat(`[ACTION] Combatant: [${self.id}] is blocking the next attack.`);
+        return `Combatant: [${self.id}] is blocking the next attack.`;
     }
 }

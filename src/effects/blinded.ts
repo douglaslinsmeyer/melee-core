@@ -1,5 +1,6 @@
 import { StatusEffectInterface, StatusEffectInstance, EffectType, TargetScope } from '../effects';
 import { Match } from '../match';
+import { logger } from '../logger';
 
 const effect: StatusEffectInterface = {
     name: "Blinded",
@@ -11,19 +12,20 @@ const effect: StatusEffectInterface = {
         const self = match.getCombatant(effect.target);
         return self.isAlive();
     },
-    onApplication: (effect: StatusEffectInstance, match: Match): void => {
+    onApplication: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
         self.addEfficacyModifier({
             id: effect.id,
             name: effect.model.name,
             value: -90,
         });
+        return `Combatant: [${self.id}] is blind!`;
     },
-    onTick: (effect: StatusEffectInstance, match: Match): void => {
-    },
-    onRemoval: (effect: StatusEffectInstance, match: Match): void => {
+    onTick: (effect: StatusEffectInstance, match: Match): void => {},
+    onRemoval: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
         self.removeEfficacyModifier(effect.id);
+        return `Combatant: [${self.id}] is no longer blind.`;
     },
 }
 

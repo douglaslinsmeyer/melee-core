@@ -1,4 +1,5 @@
 import { Match } from '../match';
+import { logger } from '../logger';
 
 export interface ActionInputInterface {
     combatantId: string;
@@ -18,7 +19,7 @@ export interface ActionInterface {
     description: string;
     type: ActionType;
     params?: Record<string, string>;
-    apply(input: ActionInstanceInterface, state: Match): void;
+    apply(input: ActionInstanceInterface, state: Match): string;
 }
 
 export interface ActionInstanceInterface {
@@ -52,13 +53,14 @@ export class ActionSet {
         return action;
     }
 
-    apply(input: ActionInputInterface, match: Match): void {
+    apply(input: ActionInputInterface, match: Match): string | void {
         const action = this.find(input.action);
         const actionInstance: ActionInstanceInterface = {
             input: input,
             action: action,
         };
-        action.apply(actionInstance, match);
+        const actionMessage = action.apply(actionInstance, match);
+        logger.combat(`[ACTION:${action.name.toUpperCase()}] ${actionMessage}`);
     }
     
     merge(other: ActionSet): void {

@@ -1,7 +1,7 @@
 import { IO } from "./io/io";
 import { Match, MatchState } from "./match";
 import { Event } from "./events";
-import { logger, combatLoggerArray } from "./logger";
+import { logger, combatLog } from "./logger";
 import { ActionInputInterface } from "./actions/actions";
 
 const infiniteLoopMaxRounds = 100;
@@ -26,7 +26,7 @@ export class Engine {
             this.advance(match);
         }
         this.end(match);
-        logger.info(combatLoggerArray.map(obj => obj[0]).join("\n"));
+        logger.info(combatLog.join("\n"));
     }
     
     start(match: Match): void {
@@ -36,7 +36,7 @@ export class Engine {
 
     advance(match: Match): void {
         match.currentRound++;
-        logger.combat(`[ROUND:${match.currentRound}:STARTED]: Round No. [${match.currentRound}] started.`);
+        logger.combat(`[ROUND:STARTED]: Round No. [${match.currentRound}] started.`);
         match.ruleBook.trigger(Event.ROUND_STARTED, match);
         match.combatants.forEach(combatant => {
             if (combatant.health <= 0) return;
@@ -47,13 +47,13 @@ export class Engine {
                 action: response.action,
                 params: response.params
             };
+            logger.combat(`[ACTION:STARTED] Combatant: [${combatant.id}] performed action: [${actionInput.action}] on target: [${actionInput.targetId}].`);
             match.actionSet.apply(actionInput, match);
-            logger.combat(`[ACTION] Combatant: [${combatant.id}] performed action: [${actionInput.action}] on target: [${actionInput.targetId}].`);
             match.ruleBook.trigger(Event.ACTION_PERFORMED, match);
         });
         
         match.ruleBook.trigger(Event.ROUND_ENDED, match);
-        logger.combat(`[ROUND:${match.currentRound}:ENDED]: Round No. [${match.currentRound}] ended.`);
+        logger.combat(`[ROUND:ENDED]: Round No. [${match.currentRound}] ended.`);
     }
 
     end(match: Match): void {
@@ -61,7 +61,6 @@ export class Engine {
         logger.combat(`[MATCH:ENDED]: The match ended. The winner(s) are: [${match.winners.map(w => w.id).join(", ")}]`);
         for (const combatant of match.combatants) {
             this._io.call(combatant, match);
-            logger.info(`Combatant ${combatant.id} received end of match notification.`);
         }
     }
 }

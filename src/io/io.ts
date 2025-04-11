@@ -1,6 +1,6 @@
 import { ActionSet } from "../actions/actions";
 import { Combatant } from "../combatant";
-import { combatLoggerArray } from "../logger";
+import { combatLog } from "../logger";
 import { Match } from "../match";
 import { RuleBook } from "../rules/rules";
 
@@ -31,9 +31,7 @@ export class IO {
             uri: combatant.bot.uri,
             self: combatant,
             match: match,
-            log: combatLoggerArray.map(log => {
-                return log[0];
-            }),
+            log: combatLog,
             rules: ioRuleBookFilter(match.ruleBook),
             actions: ioActionSetFilter(match.actionSet)
         });

@@ -44,9 +44,9 @@ export interface StatusEffectInterface {
     type: EffectType;
     targetScope: TargetScope;
     isApplicable(effect: StatusEffectInstance, match: Match, context?: any): boolean;
-    onApplication(effect: StatusEffectInstance, match: Match, context?: any): void;
-    onTick(effect: StatusEffectInstance, match: Match, context?: any): void;
-    onRemoval(effect: StatusEffectInstance, match: Match, context?: any): void;
+    onApplication(effect: StatusEffectInstance, match: Match, context?: any): string | void;
+    onTick(effect: StatusEffectInstance, match: Match, context?: any): string | void;
+    onRemoval(effect: StatusEffectInstance, match: Match, context?: any): string | void;
 }
 
 /**
@@ -84,24 +84,15 @@ export class StatusEffectCollection {
     
     private _effects: StatusEffectInstance[] = [];
 
-    add(effect: StatusEffectInstance, match: Match): void {
-        if (!effect.model.isApplicable(effect, match)) return;
-        if (this.isInvalidTargetForEffect(effect, match)) return;
-        if (this.alreadyHasBetter(effect, match)) return;
-        this.removeByName(effect.model.name, match);
-        this._effects.push(effect);
-        effect.model.onApplication(effect, match);
-    }
-
-    get all(): StatusEffectInstance[] {
+    public get all(): StatusEffectInstance[] {
         return this._effects;
     }
 
-    has(name: string): boolean {
+    public has(name: string): boolean {
         return this._effects.some(e => e.model.name === name);
     }
 
-    removeByName(name: string, match: Match): void {
+    public removeByName(name: string, match: Match): void {
         const index = this._effects.findIndex(e => e.model.name === name);
         if (index === -1) return;
         const effect = this._effects[index];
@@ -109,14 +100,29 @@ export class StatusEffectCollection {
         effect.model.onRemoval(effect, match);
     }
 
-    remove(effect: StatusEffectInstance, match: Match): void {
+    public add(effect: StatusEffectInstance, match: Match): void {
+        if (!effect.model.isApplicable(effect, match)) return;
+        if (this.isInvalidTargetForEffect(effect, match)) return;
+        if (this.alreadyHasBetter(effect, match)) return;
+        this.removeByName(effect.model.name, match);
+        this._effects.push(effect);
+        const effectMessage = effect.model.onApplication(effect, match);
+        if (effectMessage) {
+            logger.combat(`[EFFECT:${effect.model.name.toUpperCase()}] ${effectMessage}`);
+        }
+    }
+
+    public remove(effect: StatusEffectInstance, match: Match): void {
         const index = this._effects.findIndex(e => e.id === effect.id);
         if (index === -1) return;
         this._effects.splice(index, 1);
-        effect.model.onRemoval(effect, match);
+        const effectMessage = effect.model.onRemoval(effect, match);
+        if (effectMessage) {
+            logger.combat(`[EFFECT:${effect.model.name.toUpperCase()}] ${effectMessage}`);
+        }
     }
 
-    tick(match: Match): void {
+    public tick(match: Match): void {
         this._effects.forEach(effect => {
             if (false === effect.tickingStarted) {
                 effect.tickingStarted = true;
@@ -127,7 +133,11 @@ export class StatusEffectCollection {
                 this.remove(effect, match);
                 return;
             }
-            effect.model.onTick(effect, match);
+
+            const effectMessage = effect.model.onTick(effect, match);
+            if (effectMessage) {
+                logger.combat(`[EFFECT:${effect.model.name}] ${effectMessage}`);
+            }
         });
     }
 

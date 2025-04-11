@@ -12,21 +12,20 @@ const effect: StatusEffectInterface = {
         const self = match.getCombatant(effect.target);
         return self.isAlive();
     },
-    onApplication: (effect: StatusEffectInstance, match: Match): void => {
+    onApplication: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
         self.addEfficacyModifier({
             id: effect.id,
             name: effect.model.name,
             value: -50,
         });
-        logger.combat(`[EFFECT] Combatant: [${self.id}] is now dazed.`);
+        return `Combatant: [${self.id}] is now dazed.`;
     },
-    onTick: (effect: StatusEffectInstance, match: Match): void => {
-    },
-    onRemoval: (effect: StatusEffectInstance, match: Match): void => {
+    onTick: (effect: StatusEffectInstance, match: Match): void => {},
+    onRemoval: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
         self.removeEfficacyModifier(effect.id);
-        logger.combat(`[EFFECT] Combatant: [${self.id}] is no longer dazed.`);
+        return `Combatant: [${self.id}] is no longer dazed.`;
     },
 }
 

@@ -27,7 +27,6 @@ export class MaxRoundsRule implements RuleInterface {
 
     private setMaxRounds(match: Match): void {
         match.rounds = this.roundLimit;
-        logger.info(`Round limit set to ${this.roundLimit}.`);
         logger.combat(`[MATCH:ROUND_LIMIT] Round limit set to [${this.roundLimit}].`);
     }
 

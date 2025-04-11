@@ -7,7 +7,7 @@ export class MoveTowardAction implements ActionInterface {
     description: string = 'Move your combatant to a new position.';
     type: ActionType = ActionType.NEUTRAL;
     params?: Record<string, string>;
-    apply(instance: ActionInstanceInterface, match: Match): void {
+    apply(instance: ActionInstanceInterface, match: Match): string {
         const self = match.combatants.find(c => c.id === instance.input.combatantId);
         const target = match.combatants.find(c => c.id === instance.input.targetId);
         if (!self || !target) {
@@ -16,7 +16,6 @@ export class MoveTowardAction implements ActionInterface {
         }
         
         self.location.moveToward(target.location, self.movementSpeed);
-        logger.combat(`[ACTION] Combatant: [${self.id}] moved toward target: [${target.id}].`);
-        logger.info(`Combatant ${self.id} is now ${self.location.distanceTo(target.location)} units away from ${target.id}.`);
+        return `Combatant: [${self.id}] moved toward target: [${target.id}].`;
     }
 }

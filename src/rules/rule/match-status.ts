@@ -13,6 +13,5 @@ export class MatchStatusRule implements RuleInterface {
     priority: number = 1;
     apply(trigger: string, match: Match): void {
         match.state = MatchState.IN_PROGRESS;
-        logger.info(`Match status set to: ${match.state}`);
     }
 }

@@ -7,12 +7,12 @@ export class WaitAction implements ActionInterface {
     description: string = 'Wait for the next turn.';
     type: ActionType = ActionType.NEUTRAL;
     params?: Record<string, string>;
-    apply(instance: ActionInstanceInterface, match: Match): void {
+    apply(instance: ActionInstanceInterface, match: Match): string {
         const self = match.combatants.find(c => c.id === instance.input.combatantId);
         if (!self) {
             logger.error('Invalid input: combatant not found.');
             throw new Error('Invalid input: combatant not found.');
         }
-        logger.combat(`[ACTION] Combatant: [${self.id}] is waiting for the next turn.`);
+        return `Combatant: [${self.id}] is waiting for the next turn.`;
     }
 }

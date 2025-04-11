@@ -13,7 +13,7 @@ const effect: StatusEffectInterface = {
         const self = match.getCombatant(effect.target);
         return self.isAlive();
     },
-    onApplication: (effect: StatusEffectInstance, match: Match): void => {
+    onApplication: (effect: StatusEffectInstance, match: Match): string => {
         const defenseModifierValue = dice.roll('1d10').total;
         const self = match.getCombatant(effect.target);
         self.addDefenseModifier({
@@ -21,14 +21,13 @@ const effect: StatusEffectInterface = {
             name: effect.model.name,
             value: defenseModifierValue,
         });
-        logger.combat(`[EFFECT] Combatant: [${self.id}] is shielded. [Defense: +${defenseModifierValue}].`);
+        return `Combatant: [${self.id}] is shielded. [Defense: +${defenseModifierValue}].`;
     },
-    onTick: (effect: StatusEffectInstance, match: Match): void => {
-    },
-    onRemoval: (effect: StatusEffectInstance, match: Match): void => {
+    onTick: (effect: StatusEffectInstance, match: Match): void => {},
+    onRemoval: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
         self.removeDefenseModifier(effect.id);
-        logger.combat(`[EFFECT] Combatant: [${self.id}] is no longer shielded.`);
+        return `Combatant: [${self.id}] is no longer shielded.`;
     },
     
 }
