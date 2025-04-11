@@ -1,5 +1,4 @@
-import { Match } from './match';
-import { ActionInputInterface } from './actions';
+import { Match } from '../match';
 
 /**
  * Rule interface

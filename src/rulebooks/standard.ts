@@ -1,5 +1,5 @@
-import { RuleBook } from '../rules';
-import * as Rule from '../rules/index';
+import { RuleBook } from '../rules/rules';
+import * as Rule from '../rules/rule/index';
 
 export default function (): RuleBook { 
     const rulebook = new RuleBook('core');

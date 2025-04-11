@@ -1,6 +1,6 @@
-import { ActionInstanceInterface, ActionInterface, ActionSet } from "./actions";
+import { ActionInstanceInterface, ActionInterface, ActionSet } from "./actions/actions";
 import { Combatant } from "./combatant";
-import { RuleBook } from "./rules";
+import { RuleBook } from "./rules/rules";
 import { Event } from "./events";
 
 export enum MatchState {

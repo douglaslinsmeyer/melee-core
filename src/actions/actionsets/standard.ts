@@ -1,4 +1,4 @@
-import * as actions from '../actions/index';
+import * as actions from '../action/index';
 import { ActionSet } from '../actions';
 
 export default function (): ActionSet {

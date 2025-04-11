@@ -1,6 +1,6 @@
 import { ActionType, ActionInterface, ActionInstanceInterface } from '../actions';
-import { Match } from '../match';
-import { logger } from '../logger';
+import { Match } from '../../match';
+import { logger } from '../../logger';
 
 export class WaitAction implements ActionInterface {
     name: string = 'action.movements.wait';

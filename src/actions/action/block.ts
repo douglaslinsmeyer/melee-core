@@ -1,8 +1,8 @@
 import { ActionInterface, ActionType, ActionInstanceInterface } from '../actions';
-import { Match } from '../match';
-import { logger } from '../logger';
-import Shielded from '../effects/shielded';
-import { StatusEffect } from '../effects';
+import { Match } from '../../match';
+import { logger } from '../../logger';
+import Shielded from '../../effects/shielded';
+import { StatusEffect } from '../../effects';
 
 export class BlockAction implements ActionInterface {
     name: string = 'defense.block';

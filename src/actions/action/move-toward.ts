@@ -1,6 +1,6 @@
 import { ActionInterface, ActionInputInterface, ActionType, ActionInstanceInterface } from '../actions';
-import { Match } from '../match';
-import { logger } from '../logger';
+import { Match } from '../../match';
+import { logger } from '../../logger';
 
 export class MoveTowardAction implements ActionInterface {
     name: string = 'movements.move.toward';

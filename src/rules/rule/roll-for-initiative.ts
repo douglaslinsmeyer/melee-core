@@ -1,8 +1,8 @@
-import { logger } from '../logger';
-import { Match } from '../match';
-import { Event } from '../events';
+import { logger } from '../../logger';
+import { Match } from '../../match';
+import { Event } from '../../events';
 import { RuleCategory, RuleInterface } from '../rules';
-import { dice } from '../dice';
+import { dice } from '../../dice';
 
 export class RollForInitiativeRule implements RuleInterface {
     name: string = 'roll-for-initiative';

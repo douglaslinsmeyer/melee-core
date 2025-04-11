@@ -2,7 +2,7 @@ import { IO } from "./io/io";
 import { Match, MatchState } from "./match";
 import { Event } from "./events";
 import { logger, combatLoggerArray } from "./logger";
-import { ActionInputInterface } from "./actions";
+import { ActionInputInterface } from "./actions/actions";
 
 const infiniteLoopMaxRounds = 100;
 const infiniteLoopMaxRoundsMessage = `Infinite loop detected. The match has been stopped after ${infiniteLoopMaxRounds} rounds.`;

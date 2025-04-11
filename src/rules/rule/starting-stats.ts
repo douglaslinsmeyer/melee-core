@@ -1,6 +1,5 @@
-import { logger } from '../logger';
-import { Match } from '../match';
-import { Event } from '../events';
+import { Match } from '../../match';
+import { Event } from '../../events';
 import { RuleCategory, RuleInterface } from '../rules';
 
 export class StartingStatsRule implements RuleInterface {

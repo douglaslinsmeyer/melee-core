@@ -1,4 +1,4 @@
-import { Location } from "../src/core/movement";
+import { Location } from "../src/movement";
 
 describe('Game Test', () => {
     test('Test 1-Dimensional distance calculation.', () => {

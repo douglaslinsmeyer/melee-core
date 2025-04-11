@@ -1,8 +1,8 @@
-import { logger } from '../logger';
-import { Match } from '../match';
-import { Event } from '../events';
+import { logger } from '../../logger';
+import { Match } from '../../match';
+import { Event } from '../../events';
 import { RuleCategory, RuleInterface } from '../rules';
-import { MatchState } from '../match';
+import { MatchState } from '../../match';
 
 export class MaxRoundsRule implements RuleInterface {
     name: string = 'win-condition.max-rounds';
