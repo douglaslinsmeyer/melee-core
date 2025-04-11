@@ -6,6 +6,10 @@ const appLogger = new Logger({
 
 export const combatLoggerArray: any[] = [];
 
+export const getCombatLog = () => {
+    return 
+}
+
 const combatLogger = new Logger({
     name: 'CombatLog',
     type: 'hidden',
@@ -20,6 +24,7 @@ export const logger = {
         appLogger.info(message, ...args);
     },
     combat: (message: string, ...args: any[]) => {
+        appLogger.info(message, ...args);
         combatLogger.info(message, ...args);
     },
     trace: (message: string, ...args: any[]) => {

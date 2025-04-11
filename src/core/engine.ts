@@ -40,7 +40,6 @@ export class Engine {
         match.ruleBook.trigger(Event.ROUND_STARTED, match);
         match.combatants.forEach(combatant => {
             if (combatant.health <= 0) return;
-            combatant.effects.tick(match);
             const response = this.io.call(combatant.bot.uri, combatant, match);
             const actionInput: ActionInputInterface = {
                 combatantId: combatant.id,

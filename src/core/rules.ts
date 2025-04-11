@@ -14,7 +14,7 @@ export interface RuleInterface {
     category?: string;
     priority?: number;
     visible?: boolean;
-    apply(trigger: string, match: Match): void;
+    apply(trigger: string, match: Match, context?: any): void;
 }
 
 export enum RuleCategory {
@@ -62,10 +62,10 @@ export class RuleBook {
         this.sort();
     }
 
-    trigger(trigger: string, state: Match): Match {
+    trigger(trigger: string, state: Match, context?: any): Match {
         this.rules.forEach(rule => {
             if (rule.trigger.includes(trigger)) {
-                rule.apply(trigger, state);
+                rule.apply(trigger, state, context);
             }
         });
         return state;

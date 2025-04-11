@@ -1,6 +1,7 @@
 import { logger } from "./logger";
 import { Match } from "./match";
 import { v4 as uuidv4 } from 'uuid';
+import { Event } from "./events";
 
 export enum EffectType {
     BENEFICIAL = 'Beneficial',
@@ -42,9 +43,10 @@ export interface StatusEffectInterface {
     tier: number;
     type: EffectType;
     targetScope: TargetScope;
-    apply(effect: StatusEffectInstance, match: Match): void;
-    tick(effect: StatusEffectInstance, match: Match): void;
-    reset(effect: StatusEffectInstance, match: Match): void;
+    isApplicable(effect: StatusEffectInstance, match: Match, context?: any): boolean;
+    onApplication(effect: StatusEffectInstance, match: Match, context?: any): void;
+    onTick(effect: StatusEffectInstance, match: Match, context?: any): void;
+    onRemoval(effect: StatusEffectInstance, match: Match, context?: any): void;
 }
 
 /**
@@ -85,8 +87,11 @@ export class StatusEffectCollection {
     add(effect: StatusEffectInstance, match: Match): void {
         if (this.isInvalidTargetForEffect(effect, match)) return;
         if (this.alreadyHasBetter(effect, match)) return;
-        this._effects.push(effect);
-        effect.model.apply(effect, match);
+        if (effect.model.isApplicable(effect, match)) {
+            this.removeByName(effect.model.name, match);
+            this._effects.push(effect);
+            effect.model.onApplication(effect, match);
+        }
     }
 
     get all(): StatusEffectInstance[] {
@@ -97,11 +102,19 @@ export class StatusEffectCollection {
         return this._effects.some(e => e.model.name === name);
     }
 
+    removeByName(name: string, match: Match): void {
+        const index = this._effects.findIndex(e => e.model.name === name);
+        if (index === -1) return;
+        const effect = this._effects[index];
+        this._effects.splice(index, 1);
+        effect.model.onRemoval(effect, match);
+    }
+
     remove(effect: StatusEffectInstance, match: Match): void {
         const index = this._effects.findIndex(e => e.id === effect.id);
         if (index === -1) return;
         this._effects.splice(index, 1);
-        effect.model.reset(effect, match);
+        effect.model.onRemoval(effect, match);
     }
 
     tick(match: Match): void {
@@ -115,7 +128,7 @@ export class StatusEffectCollection {
                 this.remove(effect, match);
                 return;
             }
-            effect.model.tick(effect, match);
+            effect.model.onTick(effect, match);
         });
     }
 
