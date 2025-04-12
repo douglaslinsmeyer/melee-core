@@ -1,7 +1,7 @@
 import { mock } from 'ts-jest-mocker'
-import { IODriverInternal } from '../src/io/drivers/internal/internal';
-import { Match } from '../src/match';
-import { Combatant } from '../src/combatant';
+import { IODriverInternal } from '../src/core/io/drivers/internal/internal';
+import { Match } from '../src/core/match';
+import { Combatant } from '../src/core/combatant';
 
 describe('Internal driver tests:', () => {
     test('test bot loading', () => {

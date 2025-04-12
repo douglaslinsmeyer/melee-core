@@ -1,12 +1,12 @@
-import { Bot } from '../src/bot';
-import { Combatant } from '../src/combatant';
-import { Engine } from '../src/engine';
-import { IO } from '../src/io/io';
-import internalDriver from '../src/io/drivers/internal/internal';
-import { standard } from '../src/rules/rulebooks';
-import standardActions from '../src/actions/actionsets/standard';
-import { Match } from '../src/match';
-import { Location } from './../src/movements/movement';
+import { Bot } from '../src/core/bot';
+import { Combatant } from '../src/core/combatant';
+import { Engine } from '../src/core/engine';
+import { IO } from '../src/core/io/io';
+import internalDriver from '../src/core/io/drivers/internal/internal';
+import { standard } from '../src/core/rules/rulebooks';
+import standardActions from '../src/core/actions/actionsets/standard';
+import { Match } from '../src/core/match';
+import { Location } from '../src/core/movements/movement';
 
 const io = new IO();
 const engine = new Engine(io);

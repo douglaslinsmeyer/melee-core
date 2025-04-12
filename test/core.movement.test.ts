@@ -1,4 +1,4 @@
-import { Location } from "../src/movements/movement";
+import { Location } from "../src/core/movements/movement";
 
 function createLocation(x: number, y: number, z: number): Location {
     return new Location({ x, y, z });
