@@ -4,7 +4,7 @@ import { RuleBook } from "./rules/rules";
 import { Event } from "./events";
 
 export enum MatchState {
-    PENDING = "match.PENDING",
+    PENDING = "match.pending",
     IN_PROGRESS = "match.in_progress",
     COMPLETE = "match.complete"
 }
@@ -16,6 +16,7 @@ export enum MatchState {
  * It contains information about the rounds, combatants, and current round.
  */
 export class Match {
+    id: string = crypto.randomUUID();
     rounds: number = 100;
     currentRound: number = 0;
     combatants: Combatant[] = [];
