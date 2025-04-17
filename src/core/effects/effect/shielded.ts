@@ -20,7 +20,7 @@ const effect: StatusEffectInterface = {
             id: effect.id,
             name: effect.model.name,
             value: blockValue,
-            type: StatModifierType.PERCENTAGE
+            type: StatModifierType.FLAT
         });
         return `Combatant: [${self.id}] is shielded. [Defense: +${blockValue}].`;
     },
