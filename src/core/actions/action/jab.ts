@@ -16,14 +16,12 @@ export class JabAction implements ActionInterface {
         if (!self || !target) {
             throw new Error('Invalid input: combatant or target not found.');
         }
-        const originalDamage = dice.roll('3d4').total;
-        const effectiveDamage = Math.round(originalDamage * self.efficacyPercentage);
-        const totalDamage = Math.max(effectiveDamage - target.defense, 0);
-        target.damage(totalDamage);
+        const damage = dice.roll('3d4').total;
+        target.damage(damage);
         if (dice.roll('1d20>15')) {
             target.effects.add(StatusEffect(Dazed, self.id, target.id, 1), match);
         }
 
-        return `Combatant: [${self.id}] attacked target: [${target.id}] with [jabs] for [Total: ${totalDamage}] (Original: ${originalDamage}, Effective: ${effectiveDamage}) damage.`;
+        return `Combatant: [${self.id}] attacked target: [${target.id}] with [jabs] for [Total: ${damage}] damage.`;
     }
 }
