@@ -1,6 +1,5 @@
 import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '@/core/effects';
 import { Match } from '@/core/match';
-import { dice } from '@/core/dice';
 
 const effect: StatusEffectInterface = {
     name: 'Shielded',
@@ -13,14 +12,13 @@ const effect: StatusEffectInterface = {
         return self.isAlive();
     },
     onApplication: (effect: StatusEffectInstance, match: Match): string => {
-        const defenseModifierValue = dice.roll('1d10').total;
         const self = match.getCombatant(effect.target);
         self.addDefenseModifier({
             id: effect.id,
             name: effect.model.name,
-            value: defenseModifierValue,
+            value: 8,
         });
-        return `Combatant: [${self.id}] is shielded. [Defense: +${defenseModifierValue}].`;
+        return `Combatant: [${self.id}] is shielded. [Defense: +8].`;
     },
     onTick: (effect: StatusEffectInstance, match: Match): void => {},
     onRemoval: (effect: StatusEffectInstance, match: Match): string => {

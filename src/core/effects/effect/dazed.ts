@@ -13,17 +13,15 @@ const effect: StatusEffectInterface = {
     },
     onApplication: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
-        self.addEfficacyModifier({
-            id: effect.id,
-            name: effect.model.name,
-            value: -50,
-        });
+        self.addMovementSpeedModifier({ id: effect.id, name: effect.model.name, value: -0.2 });
+        self.addDefenseModifier({ id: effect.id, name: effect.model.name, value: -0.2 });
         return `Combatant: [${self.id}] is now dazed.`;
     },
     onTick: (effect: StatusEffectInstance, match: Match): void => {},
     onRemoval: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
-        self.removeEfficacyModifier(effect.id);
+        self.removeMovementSpeedModifier(effect.id);
+        self.removeDefenseModifier(effect.id);
         return `Combatant: [${self.id}] is no longer dazed.`;
     },
 }
