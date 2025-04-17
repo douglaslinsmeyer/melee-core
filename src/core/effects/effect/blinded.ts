@@ -1,5 +1,5 @@
-import { StatusEffectInterface, StatusEffectInstance, EffectType, TargetScope } from '../effects';
-import { Match } from '../../match';
+import { StatusEffectInterface, StatusEffectInstance, EffectType, TargetScope } from '@/core/effects';
+import { Match } from '@/core/match';
 
 const effect: StatusEffectInterface = {
     name: "Blinded",

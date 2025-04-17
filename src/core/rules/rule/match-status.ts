@@ -1,8 +1,7 @@
-import { logger } from '../../logger';
-import { Match } from '../../match';
-import { Event } from '../../events';
-import { RuleInterface } from '../rules';
-import { MatchState } from '../../match';
+import { Match } from '@/core/match';
+import { Event } from '@/core/events';
+import { RuleInterface } from '@/core/rules';
+import { MatchState } from '@/core/match';
 
 export class MatchStatusRule implements RuleInterface {
     name: string = 'match-status';

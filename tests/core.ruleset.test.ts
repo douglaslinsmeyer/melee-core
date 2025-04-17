@@ -1,4 +1,4 @@
-import { RuleBook } from "../src/core/rules/rules";
+import { RuleBook } from "../src/core/rules";
 
 describe('Ruleset tests:', () => {
     test('Test ruleset priority resolution', () => {

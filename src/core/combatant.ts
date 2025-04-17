@@ -1,6 +1,6 @@
-import { Locatable, Location, LocationInterface, Moveable } from "./movements/movement";
-import { Affectable, StatusEffectCollection } from "./effects/effects";
-import { BotInterface } from "./bot";
+import { Locatable, Location, LocationInterface, Moveable } from "@/core/movements";
+import { Affectable, StatusEffectCollection } from "@/core/effects";
+import { BotInterface } from "@/core/bot";
 import { v4 as uuidv4 } from 'uuid';
 
 /**

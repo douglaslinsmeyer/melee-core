@@ -1,7 +1,6 @@
-import { RuleBook } from './rules';
-import * as Rules from './index';
+import * as Rules from '@/core/rules';
 
-export const standard = new RuleBook('core');
+export const standard = new Rules.RuleBook('core');
     standard.addRule(new Rules.LastSurvivorRule())
         .addRule(new Rules.MatchStatusRule())
         .addRule(new Rules.MaxRoundsRule(50))

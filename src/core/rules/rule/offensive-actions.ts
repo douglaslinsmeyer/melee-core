@@ -1,8 +1,7 @@
-import { logger } from '../../logger';
-import { Match } from '../../match';
-import { Event } from '../../events';
-import { RuleCategory, RuleInterface } from '../rules';
-import { EffectType } from '../../effects/effects';
+import { Match } from '@/core/match';
+import { Event } from '@/core/events';
+import { RuleCategory, RuleInterface } from '@/core/rules';
+import { EffectType } from '@/core/effects';
 
 export class OffensiveActionsRule implements RuleInterface {
     name: string = 'offensive-actions';

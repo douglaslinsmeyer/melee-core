@@ -1,5 +1,5 @@
-import { IODriverInterface, IORequest, IOResponse } from "../../io";
-import alpha from './agents/alpha';
+import { IODriverInterface, IORequest, IOResponse } from "@/core/io";
+import alpha from '@/core/io/drivers/internal/agents/alpha';
 
 export interface InternalAgentInterface {
     name: string;

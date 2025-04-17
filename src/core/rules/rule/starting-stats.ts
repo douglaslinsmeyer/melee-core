@@ -1,6 +1,6 @@
-import { Match } from '../../match';
-import { Event } from '../../events';
-import { RuleCategory, RuleInterface } from '../rules';
+import { Match } from '@/core/match';
+import { Event } from '@/core/events';
+import { RuleCategory, RuleInterface } from '@/core/rules';
 
 export class StartingStatsRule implements RuleInterface {
     name: string = 'starting-stats';

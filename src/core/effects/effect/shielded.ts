@@ -1,6 +1,6 @@
-import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '../effects';
-import { Match } from '../../match';
-import { dice } from '../../dice';
+import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '@/core/effects';
+import { Match } from '@/core/match';
+import { dice } from '@/core/dice';
 
 const effect: StatusEffectInterface = {
     name: 'Shielded',

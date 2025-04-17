@@ -1,7 +1,7 @@
-import { ActionInstanceInterface, ActionInterface, ActionSet } from "./actions/actions";
-import { Combatant } from "./combatant";
-import { RuleBook } from "./rules/rules";
-import { Event } from "./events";
+import { ActionInstanceInterface, ActionSet } from "@/core/actions";
+import { Combatant } from "@/core/combatant";
+import { RuleBook } from "@/core/rules";
+import { Event } from "@/core/events";
 
 export enum MatchState {
     PENDING = "match.pending",

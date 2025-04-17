@@ -1,8 +1,8 @@
-import { ActionSet } from "../actions/actions";
-import { Combatant } from "../combatant";
-import { combatLog } from "../logger";
-import { Match } from "../match";
-import { RuleBook } from "../rules/rules";
+import { ActionSet } from "@/core/actions";
+import { Combatant } from "@/core/combatant";
+import { combatLog } from "@/core/logger";
+import { Match } from "@/core/match";
+import { RuleBook } from "@/core/rules";
 
 export interface IODriverInterface {
     call(request: IORequest): IOResponse;

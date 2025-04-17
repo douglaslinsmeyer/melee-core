@@ -1,4 +1,4 @@
-import { IODriverInterface, IORequest, IOResponse } from "./io/io";
+import { IODriverInterface } from "@/core/io";
 
 export interface BotInterface {
     name: string;

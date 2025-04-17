@@ -1,5 +1,5 @@
-import { ActionInterface, ActionInputInterface, ActionType, ActionInstanceInterface } from '../actions';
-import { Match } from '../../match';
+import { ActionInterface, ActionType, ActionInstanceInterface } from '@/core/actions';
+import { Match } from '@/core/match';
 
 export class MoveTowardAction implements ActionInterface {
     name: string = 'movements.move.toward';

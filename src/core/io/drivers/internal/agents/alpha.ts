@@ -1,4 +1,4 @@
-import { IORequest, IOResponse } from "../../../io";
+import { IORequest, IOResponse } from "../../..";
 import { logger } from "../../../../logger";
 import { dice } from '../../../../dice';
 

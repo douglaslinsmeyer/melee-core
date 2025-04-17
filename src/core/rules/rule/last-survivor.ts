@@ -1,8 +1,8 @@
-import { logger } from '../../logger';
-import { Match } from '../../match';
-import { Event } from '../../events';
-import { RuleCategory, RuleInterface } from '../rules';
-import { MatchState } from '../../match';
+import { logger } from '@/core/logger';
+import { Match } from '@/core/match';
+import { Event } from '@/core/events';
+import { RuleCategory, RuleInterface } from '@/core/rules';
+import { MatchState } from '@/core/match';
 
 export class LastSurvivorRule implements RuleInterface {
     name: string = 'win-condition.last-survivor';

@@ -1,5 +1,5 @@
-import { ActionType, ActionInterface, ActionInstanceInterface } from '../actions';
-import { Match } from '../../match';
+import { ActionType, ActionInterface, ActionInstanceInterface } from '@/core/actions';
+import { Match } from '@/core/match';
 
 export class WaitAction implements ActionInterface {
     name: string = 'action.movements.wait';

@@ -1,11 +1,10 @@
-import * as actions from '../index';
-import { ActionSet } from '../actions';
+import * as Actions from '@/core/actions';
 
-export default function (): ActionSet {
-    const actionSet = new ActionSet();
-    actionSet.addAction(new actions.MoveTowardAction());
-    actionSet.addAction(new actions.JabAction());
-    actionSet.addAction(new actions.BlockAction());
-    actionSet.addAction(new actions.WaitAction());
+export default function (): Actions.ActionSet {
+    const actionSet = new Actions.ActionSet();
+    actionSet.addAction(new Actions.MoveTowardAction());
+    actionSet.addAction(new Actions.JabAction());
+    actionSet.addAction(new Actions.BlockAction());
+    actionSet.addAction(new Actions.WaitAction());
     return actionSet;
 }

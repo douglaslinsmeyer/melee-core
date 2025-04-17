@@ -1,8 +1,8 @@
-import { ActionInterface, ActionType, ActionInstanceInterface } from '../actions';
-import { Match } from '../../match';
-import { dice } from '../../dice';
-import Dazed from '../../effects/effect/dazed';
-import { StatusEffect } from '../../effects/effects';
+import { ActionInterface, ActionType, ActionInstanceInterface } from '@/core/actions';
+import { Match } from '@/core/match';
+import { dice } from '@/core/dice';
+import Dazed from '@/core/effects/effect/dazed';
+import { StatusEffect } from '@/core/effects';
 
 export class JabAction implements ActionInterface {
     name: string = 'offense.jabs';

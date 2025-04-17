@@ -1,6 +1,6 @@
 import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { sequelize } from "@/app/db";
-import { User } from "./user";
+import { User } from "@/app/models/user";
 
 class Bot extends Model<InferAttributes<Bot>, InferCreationAttributes<Bot>> {
     declare id: number;
