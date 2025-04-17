@@ -1,3 +1,4 @@
+import { StatModifierType } from '@/core/combatant';
 import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '@/core/effects';
 import { Match } from '@/core/match';
 
@@ -13,8 +14,14 @@ const effect: StatusEffectInterface = {
     },
     onApplication: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
-        self.addMovementSpeedModifier({ id: effect.id, name: effect.model.name, value: -0.2 });
-        self.addDefenseModifier({ id: effect.id, name: effect.model.name, value: -0.2 });
+        self.addMovementSpeedModifier({
+            id: effect.id, name: effect.model.name, value: -0.2,
+            type: StatModifierType.PERCENTAGE
+        });
+        self.addDefenseModifier({
+            id: effect.id, name: effect.model.name, value: -0.2,
+            type: StatModifierType.PERCENTAGE
+        });
         return `Combatant: [${self.id}] is now dazed.`;
     },
     onTick: (effect: StatusEffectInstance, match: Match): void => {},

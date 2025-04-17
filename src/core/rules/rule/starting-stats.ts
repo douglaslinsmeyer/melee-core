@@ -14,8 +14,8 @@ export class StartingStatsRule implements RuleInterface {
             combatant.maxHealth = 100;
             combatant.health = 100;
             combatant.initiative = 0;
-            combatant.attack = 0;
-            combatant.defense = 0;
+            combatant.attack = 1;
+            combatant.defense = 1;
             combatant.movementSpeed = 5;
         });
     }

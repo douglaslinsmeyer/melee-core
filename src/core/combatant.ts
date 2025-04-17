@@ -3,6 +3,11 @@ import { Affectable, StatusEffectCollection } from "@/core/effects";
 import { BotInterface } from "@/core/bot";
 import { v4 as uuidv4 } from 'uuid';
 
+export enum StatModifierType {
+    PERCENTAGE = 'percentage',
+    FLAT = 'flat'
+}
+
 /**
  * StatModifierInterface
  * 
@@ -17,6 +22,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface StatModifierInterface {
     id: string;
     name: string;
+    type: StatModifierType;
     value: number;
 }
 
@@ -190,9 +196,21 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
 
     private calculateModifiedStat(stat: number, modifiers: StatModifierInterface[]): number {
         let modifiedStat = stat;
+
+        // Add all flat modifiers first
         for (const modifier of modifiers) {
-            modifiedStat = modifiedStat * (1 + modifier.value);
+            if (modifier.type === StatModifierType.FLAT) {
+                modifiedStat += modifier.value;
+            }
         }
+
+        // Then apply percentage modifiers
+        for (const modifier of modifiers) {
+            if (modifier.type === StatModifierType.PERCENTAGE) {
+                modifiedStat = modifiedStat * (1 + modifier.value);
+            }
+        }
+
         return modifiedStat;
     }
 }

@@ -1,3 +1,4 @@
+import { StatModifierType } from '@/core/combatant';
 import { EffectType, TargetScope, StatusEffectInterface, StatusEffectInstance } from '@/core/effects';
 import { Match } from '@/core/match';
 
@@ -17,6 +18,7 @@ const effect: StatusEffectInterface = {
             id: effect.id,
             name: effect.model.name,
             value: 8,
+            type: StatModifierType.PERCENTAGE
         });
         return `Combatant: [${self.id}] is shielded. [Defense: +8].`;
     },

@@ -1,3 +1,4 @@
+import { StatModifierType } from '@/core/combatant';
 import { StatusEffectInterface, StatusEffectInstance, EffectType, TargetScope } from '@/core/effects';
 import { Match } from '@/core/match';
 
@@ -13,8 +14,14 @@ const effect: StatusEffectInterface = {
     },
     onApplication: (effect: StatusEffectInstance, match: Match): string => {
         const self = match.getCombatant(effect.target);
-        self.addAttackModifier({ id: effect.id, name: effect.model.name, value: -0.2 });
-        self.addDefenseModifier({ id: effect.id, name: effect.model.name, value: -0.2 });
+        self.addAttackModifier({
+            id: effect.id, name: effect.model.name, value: -0.2,
+            type: StatModifierType.PERCENTAGE
+        });
+        self.addDefenseModifier({
+            id: effect.id, name: effect.model.name, value: -0.2,
+            type: StatModifierType.PERCENTAGE
+        });
         return `Combatant: [${self.id}] is blind!`;
     },
     onTick: (effect: StatusEffectInstance, match: Match): void => {},
