@@ -4,7 +4,7 @@ import { Event } from "@/core/events";
 import { logger, combatLog } from "@/core/logger";
 import { ActionInputInterface } from "@/core/actions";
 
-const infiniteLoopMaxRounds = 100;
+const infiniteLoopMaxRounds = 1000;
 const infiniteLoopMaxRoundsMessage = `Infinite loop detected. The match has been stopped after ${infiniteLoopMaxRounds} rounds.`;
 
 export class Engine {

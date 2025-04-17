@@ -14,13 +14,13 @@ import { v4 as uuidv4 } from 'uuid';
  * The combatant's stat modifier is equal to the sum of all the status modifiers
  * applied to it.
  */
-interface StatModifierInterface {
+export interface StatModifierInterface {
     id: string;
     name: string;
     value: number;
 }
 
-interface Damageable {
+export interface Damageable {
     damage(amount: number): void;
     heal(amount: number): void;
     isAlive(): boolean;
@@ -78,7 +78,7 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
 
     public get maxHealth(): number {
-        return this._maxHealth + this.calculateModifierSum(this._healthModifiers);
+        return this.calculateModifiedStat(this._maxHealth, this._healthModifiers);
     }
 
     public set maxHealth(value: number) {
@@ -100,7 +100,7 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
 
     public get attack(): number {
-        return this._attack + this.calculateModifierSum(this._attackModifiers);
+        return this.calculateModifiedStat(this._attack, this._attackModifiers);
     }
 
     public set attack(value: number) {
@@ -119,7 +119,7 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
     
     public get defense(): number {
-        return this._defense + this.calculateModifierSum(this._defenseModifiers);
+        return this.calculateModifiedStat(this._defense, this._defenseModifiers);
     }
 
     public set defense(value: number) {
@@ -137,7 +137,7 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
 
     public get initiative(): number {
-        return this._initiative + this.calculateModifierSum(this._initiativeModifiers);
+        return this.calculateModifiedStat(this._initiative, this._initiativeModifiers);
     }
 
     public set initiative(value: number) {
@@ -156,7 +156,7 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
 
     public get efficacy(): number {
-        return this._efficacy + this.calculateModifierSum(this._efficacyModifiers);
+        return this.calculateModifiedStat(this._efficacy, this._efficacyModifiers);
     }
 
     public set efficacy(value: number) {
@@ -179,7 +179,7 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     }
 
     public get movementSpeed(): number {
-        return this._movementSpeed + this.calculateModifierSum(this._movementSpeedModifiers);
+        return this.calculateModifiedStat(this._movementSpeed, this._movementSpeedModifiers);
     }
 
     public set movementSpeed(value: number) {
@@ -214,7 +214,11 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
         this.location = this.location.moveToward(target.location, distance);
     }
 
-    private calculateModifierSum(statModifiers: StatModifierInterface[]): number {
-        return statModifiers.reduce((sum: number, modifier: StatModifierInterface) => sum + modifier.value, 0);
+    private calculateModifiedStat(stat: number, modifiers: StatModifierInterface[]): number {
+        let modifiedStat = stat;
+        for (const modifier of modifiers) {
+            modifiedStat = modifiedStat * (1 + modifier.value);
+        }
+        return modifiedStat;
     }
 }
