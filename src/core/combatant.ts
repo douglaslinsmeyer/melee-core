@@ -56,9 +56,6 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
     private _movementSpeed: number = 0;
     private _movementSpeedModifiers: StatModifierInterface[] = [];
 
-    private _efficacy: number = 100;
-    private _efficacyModifiers: StatModifierInterface[] = [];
-
     constructor(bot: BotInterface, location?: LocationInterface, className?: string, faction?: string ) {
         this.bot = bot;
         this.id = uuidv4();
@@ -152,29 +149,6 @@ export class Combatant implements Locatable, Moveable, Affectable, Damageable {
         const index = this._initiativeModifiers.findIndex(m => m.id === id);
         if (index !== -1) {
             this._initiativeModifiers.splice(index, 1);
-        }
-    }
-
-    public get efficacy(): number {
-        return this.calculateModifiedStat(this._efficacy, this._efficacyModifiers);
-    }
-
-    public set efficacy(value: number) {
-        this._efficacy = value;
-    }
-
-    public get efficacyPercentage(): number {
-        return this.efficacy / 100;
-    }
-
-    public addEfficacyModifier(modifier: StatModifierInterface): void {
-        this._efficacyModifiers.push(modifier);
-    }
-
-    public removeEfficacyModifier(id: string): void {
-        const index = this._efficacyModifiers.findIndex(m => m.id === id);
-        if (index !== -1) {
-            this._efficacyModifiers.splice(index, 1);
         }
     }
 
