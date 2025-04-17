@@ -14,6 +14,6 @@ export class BlockAction implements ActionInterface {
             throw new Error('Invalid input: combatant not found.');
         }
         self.effects.add(StatusEffect(Shielded, self.id, self.id, 999), match);
-        return `Combatant: [${self.id}] is blocking the next attack.`;
+        return `Combatant: [${self.id}] is blocking attacks.`;
     }
 }

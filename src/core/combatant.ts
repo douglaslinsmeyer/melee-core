@@ -3,6 +3,11 @@ import { Affectable, StatusEffectCollection } from "@/core/effects";
 import { BotInterface } from "@/core/bot";
 import { v4 as uuidv4 } from 'uuid';
 
+/**
+ * StatModifierType
+ * 
+ * This enum defines the types of stat modifiers that can be applied to a combatant's stats.
+ */
 export enum StatModifierType {
     PERCENTAGE = 'percentage',
     FLAT = 'flat'
@@ -26,6 +31,12 @@ export interface StatModifierInterface {
     value: number;
 }
 
+/**
+ * Damageable
+ * 
+ * This interface defines the structure of a damageable entity.
+ * It includes methods for dealing damage, healing, and checking if the entity is alive.
+ */
 export interface Damageable {
     damage(amount: number): void;
     heal(amount: number): void;
